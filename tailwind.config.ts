@@ -5,13 +5,33 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "!./node_modules",
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      colors: {
+        'text': '#ffffff',
+        'background': '#171717',
+        'primary': '#48937e',
+        'secondary': '#1e1e1e',
+        'accent': '#a7a7a7',
+       },
+      fontSize: {
+        sm: '0.750rem',
+        base: '1rem',
+        xl: '1.333rem',
+        '2xl': '1.777rem',
+        '3xl': '2.369rem',
+        '4xl': '3.158rem',
+        '5xl': '4.210rem',
+      },
+      fontFamily: {
+        heading: 'Poppins',
+        body: 'Poppins',
+      },
+      fontWeight: {
+        normal: '400',
+        bold: '700',
       },
     },
   },
