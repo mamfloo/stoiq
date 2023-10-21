@@ -2,17 +2,25 @@ import mongoose from "mongoose";
 
 export interface Accounts extends mongoose.Document{
     username: string,
+    bio: string,
     email: string,
     password: string,
     profilePic: string,
-    isActivated: boolean 
+    isActivated: boolean,
+    registerDate: Date, 
 }
 
 const AccountSchema = new mongoose.Schema<Accounts>({
     username: {
         type: String,
         required: true,
-        maxlength: 20
+        maxlength: 30
+    },
+    bio: {
+        type: String,
+        required: true,
+        maxlength: 500,
+        default: ""
     },
     email: {
         type: String,
@@ -22,10 +30,18 @@ const AccountSchema = new mongoose.Schema<Accounts>({
     password: {
         type: String,
         required: true,
-        maxlength: 30
+    },
+    profilePic: {
+        type: String,
+        required: true,
     },
     isActivated: {
-        type: Boolean
+        type: Boolean,
+        required: true
+    },
+    registerDate: {
+        type: Date,
+        required: true
     }
 })
 

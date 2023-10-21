@@ -1,8 +1,8 @@
+"use client"
+
 interface Quote {
   author: string, 
   quote: string, 
-  likedBy: string[], 
-  savedBy: string[]
 }
 
 export default function QuoteCard({quote}: {quote: Quote}) {

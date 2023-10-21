@@ -2,11 +2,11 @@
 
 import { TRegisterSchema, registerSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
-export default function Register({openLoginPopUp}: {openLoginPopUp: () => any}) {
-  const [isTerms, setIsTerms] = useState(false);
+export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLoginPopUp: () => void, afterLoginOrRegister: () => void}) {
 
   const {
     register,
@@ -28,11 +28,10 @@ export default function Register({openLoginPopUp}: {openLoginPopUp: () => any}) 
     });
     const responseData = await response.json();
     if(!response.ok){
-      alert("failed");
+      toast.error("Something went wrong")
       return;
     }
-
-    if(responseData.errors){
+    if(responseData.errors){ 
       const errors = responseData.errors;
       if (errors.email) {
         setError("email", {
@@ -55,6 +54,17 @@ export default function Register({openLoginPopUp}: {openLoginPopUp: () => any}) 
           message: errors.confirmPassword
         })
       }
+    } else if(responseData.error) {
+      console.log(responseData.error)
+      toast.error(responseData.error)
+    } else {
+      toast.success("Account created successfully!")
+      reset({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+      })
     }
   }
   
@@ -64,49 +74,49 @@ export default function Register({openLoginPopUp}: {openLoginPopUp: () => any}) 
       -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10'>
         <h1 className='text-primary mb-10 text-2xl text-center mt-0'>Register</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-8'>
-            <div>
+            <div className='flex justify-center'>
               <input 
                 {...register("username")}
-                name="username" type="text" placeholder='username' 
+                type="text" placeholder='username' 
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
                 {errors.username && (
                   <p className='text-red-500 -mb-6'>{errors.username.message}</p>
                 )}
             </div>
-            <div>
+            <div className='flex justify-center'>
               <input 
                 {...register("email")}
-                name="email" type="email" placeholder='email' 
+                type="email" placeholder='email' 
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
                 {errors.username && (
                   <p className='text-red-500 absolute'>{errors.email?.message}</p>
                 )}
               </div>
-            <div>
+            <div className='flex justify-center'>
               <input 
                 {...register("password")}
-                name="password" type="password" placeholder='********' 
+                type="password" placeholder='********' 
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
                 {errors.password && (
                   <p className='text-red-500 absolute'>{errors.password.message}</p>
                 )}
             </div>
-            <div>
+            <div className='flex justify-center'>
               <input 
                 {...register("confirmPassword")}
-                name="password" type="password" placeholder='********' 
+                type="password" placeholder='********' 
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
-                {errors.password && (
-                  <p className='text-red-500 absolute'>{errors.confirmPassword?.message}</p>
+                {errors.confirmPassword && (
+                  <p className='text-red-500'>{errors.confirmPassword.message}</p>
                 )}
             </div>
             <label htmlFor="terms" className='text-center'><input type="checkbox" name="terms" 
-              onClick={e => setIsTerms(!isTerms)}/> <span className='ml-1'>Accept terms and conditions</span></label>
-            <div className='flex justify-center mt-7 flex-col'>
+              /> <span className='ml-1'>Accept terms and conditions</span></label>
+            <div className='flex justify-center  flex-col'>
             <button disabled={isSubmitting} 
               type='submit'
               className='bg-primary px-10 py-3 rounded-lg text-black'>Register</button>

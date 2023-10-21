@@ -1,37 +1,18 @@
-import QuoteCard from './(components)/(quoteCard)/QuoteCard';
-import Quote, { Quotes } from '@/models/Quote';
+
 import dbConnect from '@/lib/mongo/connect';
-import NewPost from './(components)/(newPost)/NewPost';
-import Login from './(components)/(loginPopUp)/Login';
-import Register from './(components)/(registerPopUp)/Register';
+import PostQuotesSelector from './(components)/(postQuotesSelector)/PostQuotesSelector';
 
 export default async function Home() {
-  const quotes = await getQuotes();
+  await dbConnect();
+
+/*   const session = await getServerSession(authOptions)
+  console.log(session) */
+
 
   return (
     <div className=''>
-      <NewPost />
-      <div className="flex flex-col gap-3 mt-5">
-        {quotes.map((q, i) => (
-          <QuoteCard key={i} quote={{
-            author: q.author,
-            quote: q.quote,
-            likedBy: q.likedBy,
-            savedBy: q.savedBy
-          }} />
-        ))} 
-      </div>
+      <PostQuotesSelector/>
     </div>
     
   )
-}
-
-async function getQuotes(){
-  try {
-    await dbConnect();
-    const res: Quotes[] = await Quote.find().limit(10);
-    return res;
-  } catch(e) {
-    throw new Error("There was a problem fetching quotes");
-  }
 }
