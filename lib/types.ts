@@ -38,7 +38,7 @@ export type TLikeSchema = z.infer<typeof likeSchema>;
 
 export const commentSchema = z
     .object({
-        postId: z.string().min(1, "Invalid post"),
+        postId: z.string().min(1, "Invalid post").optional(),
         text: z.string().min(1, "Write something")
 
     })

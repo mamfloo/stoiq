@@ -44,7 +44,8 @@ export const authOptions: NextAuthOptions = {
               username: existingUser.username,
               email: existingUser.email,
               profilePic: existingUser.profilePic,
-              bio: existingUser.bio
+              bio: existingUser.bio,
+              registerDate: existingUser.registerDate.toLocaleDateString()
           }
       }
   })
@@ -65,7 +66,8 @@ export const authOptions: NextAuthOptions = {
                 username: user.username,
                 profilePic: user.profilePic,
                 bio: user.bio,
-                id: user.id
+                id: user,
+                registerDate: user.registerDate
             }
         }
         return token;
@@ -78,7 +80,8 @@ export const authOptions: NextAuthOptions = {
                 username: token.username,
                 profilePic: token.profilePic,
                 bio: token.bio,
-                id: token.id
+                id: token.id,
+                registerDate: token.registerDate
             }
         }
     }

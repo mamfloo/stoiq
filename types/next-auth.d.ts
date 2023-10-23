@@ -6,6 +6,7 @@ declare module "next-auth" {
     profilePic: string
     bio: string
     id: string
+    registerDate: string
 }
   /**
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
@@ -16,13 +17,15 @@ declare module "next-auth" {
       profilePic: string
       bio: string
       id: string
+      registerDate: string
     }
     token: {
       username: string;
       profilePic: string
       bio: string
       id: string
-  }
+      registerDate: string
+    }
   }
 
 }

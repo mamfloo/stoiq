@@ -1,14 +1,31 @@
 "use client"
 import { Posts } from "@/models/Post";
 import PostCard from "../(card)/PostCard";
-import { VscAccount } from "react-icons/vsc";
 import { useForm } from "react-hook-form";
 import { TNewPostSchema, newPostSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addNewPost } from "@/app/(services)/postService";
+import { addNewPost } from "@/app/(serverActions)/postService";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
+import Image from "next/image";
 
 export default function Posts({posts} : {posts: Posts[]}) {
+    const [ imgAvatar, setImgAvatar ] = useState("default.png");
+
+    useEffect(() => {
+        const findSession = async () => {
+          const session = await getSession()
+          if(session) {
+            setImgAvatar(session.user.profilePic)
+          };
+        }
+        findSession();
+      }, [])
+
+    useEffect(() => {
+      //todo chimare endpoint che mi ritorna lista like e saved passando come parametro id dei post
+    }, [])
 
     const {
         register,
@@ -35,14 +52,16 @@ export default function Posts({posts} : {posts: Posts[]}) {
         <div className='flex flex-col mt-4'>
             <div className="flex items-center">
                 <div className="hidden md:inline md:mr-2">
-                <VscAccount size="3.5em" />
+                    <Image 
+                    className="rounded-full aspect-square"
+                    src={"/img/avatars/" + imgAvatar + "?$" + new Date().getTime()} alt={"profile image"} width={60} height={60} loading="lazy"/>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}
                     className="w-full flex">
                     <input 
                     {...register("text")}
                     type="text" placeholder='What is on your mind...' 
-                    className='bg-background rounded-lg border-2 border-accent p-2 w-full h-5/6 outline-none'/>
+                    className='bg-background rounded-lg border-2 border-accent p-2 w-full h-5/6 outline-none focus:border-primary'/>
                     <button disabled={isSubmitting} type="submit" className='ml-2 bg-primary text-black p-2 rounded-lg w-28 disabled:bg-secondary hover:text-white'>Post</button>
                 </form>
             </div>

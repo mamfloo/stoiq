@@ -1,6 +1,5 @@
 import { authOptions } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/errorToString";
-import clientPromise from "@/lib/mongo/mongodb";
 import { TUpdateAccountSchema, updateAccountSchema } from "@/lib/types";
 import Account from "@/models/Account";
 import Comment from "@/models/Comment";
@@ -8,7 +7,6 @@ import Like from "@/models/Like";
 import Post from "@/models/Post";
 import { writeFile } from "fs/promises";
 import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import path from "path";
 
@@ -16,7 +14,6 @@ const MAX_FILE_SIZE = 1000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 export async function POST(req: Request){
-    //const body = await req.json(); 
     const formData = await req.formData();
     const session = await getServerSession(authOptions);
     if(!session?.user.username){

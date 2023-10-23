@@ -3,7 +3,7 @@
 import { authOptions } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/errorToString";
 import { newPostSchema } from "@/lib/types";
-import Post, { Posts } from "@/models/Post";
+import Post, { Posts } from '@/models/Post';
 import { getServerSession } from "next-auth";
 
 export async function addNewPost(data: unknown){
@@ -51,8 +51,13 @@ export async function addNewPost(data: unknown){
 
 export async function getPosts(page: number, count: number){
     try{
-        const res: Posts[] = await Post.find({}, {_id: 0, author: {_id: 0}}).sort({postTime: -1}).skip(page * count).limit(count).lean();
-        return res;
+        const res: Posts[] = await Post.find({}, {author: {_id: 0}}).sort({postTime: -1}).skip(page * count).limit(count).lean();
+        return res.map(r => (
+            {
+                ...r,
+                _id: r._id.toString()
+            }
+        ));
     } catch (e){
         return {
             errors: getErrorMessage(e)

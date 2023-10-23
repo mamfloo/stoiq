@@ -15,6 +15,7 @@ const config: Config = {
         'primary': '#48937e',
         'secondary': '#1e1e1e',
         'accent': '#a7a7a7',
+        'tertiary': '#262626'
        },
       fontSize: {
         sm: '0.750rem',

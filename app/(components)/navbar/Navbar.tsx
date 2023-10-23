@@ -2,15 +2,14 @@
 
 import Image from "next/image"
 import { useState } from "react";
-import { BsBookmark } from "react-icons/bs";
-import { BiLogIn } from "react-icons/bi";
+import { BiBookmark } from "react-icons/bi";
+import { BiLogInCircle, BiLogOutCircle } from "react-icons/bi";
 import { VscAccount } from "react-icons/vsc";
 import Login from "../(loginPopUp)/Login";
 import Register from "../(registerPopUp)/Register";
 import { useRef, useEffect } from "react"
-import { getSession, signOut, useSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import { FiSettings } from "react-icons/fi"
-import { BiLogOutCircle } from "react-icons/bi"
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -74,7 +73,7 @@ export default function Navbar() {
   }
 
   function navigateTo(page: string) {
-    router.push(page);
+    router.replace(page);
     setIsOptionOpen(false);
   }
   
@@ -88,7 +87,7 @@ export default function Navbar() {
               onClick={() => navigateTo("saved")}
               className='bg-secondary'>
               <div className='p-3 hover:text-primary'>
-                <BsBookmark size="1.8em" />
+                <BiBookmark size="1.8em" />
               </div>
             </button>
           </div>
@@ -104,7 +103,7 @@ export default function Navbar() {
           <button className='bg-secondary' 
             onClick={() => setIsLoginOpen(!isLoginOpen)}>
             <div className='p-3  hover:text-primary'>
-              <BiLogIn size="2em" />
+              <BiLogInCircle size="2em" />
             </div>
           </button> 
         }
@@ -122,13 +121,13 @@ export default function Navbar() {
               <div ref={optionMenuRef} 
                 className="flex flex-col absolute gap-3 right-1/4 bg-secondary border-2 border-accent rounded-lg p-3 px-5 -mt-3">
                 <button 
-                  onClick={() => navigateTo("account")}
+                  onClick={() => navigateTo("/user/" + session.user.username)}
                   className="flex content-center items-center hover:text-primary">
                   <div className="inline-block align-bottom">< VscAccount size={"1.5em"} /></div>
                   <p className="mb-1 ml-1">profile</p>
                 </button>
                 <button 
-                  onClick={() => navigateTo("settings")}
+                  onClick={() => navigateTo("/settings")}
                   className="flex content-center items-center hover:text-primary">
                   <div className="inline-block align-bottom">< FiSettings size={"1.5em"} /></div>
                   <p className="mb-1 ml-1">settings</p>

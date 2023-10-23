@@ -5,9 +5,9 @@ import Quotes from './Quotes';
 import Posts from './Posts';
 import { Quotes as QuotesModel } from '@/models/Quote';
 import { Posts as PostsModel }  from '@/models/Post';
-import { getQuotes } from '@/app/(services)/quoteService';
+import { getQuotes } from '@/app/(serverActions)/quoteService';
 import toast from 'react-hot-toast';
-import { getPosts } from '@/app/(services)/postService';
+import { getPosts } from '@/app/(serverActions)/postService';
 import { useIntersection } from '@mantine/hooks';
 
 
@@ -48,12 +48,12 @@ export default function PostQuotesSelector() {
         if(Array.isArray(postsRes)){
             if (posts.length === 0){
                 setPosts(postsOld => {
-                    return postsOld.concat(postsRes);
+                    return postsOld.concat(postsRes as PostsModel[]);
                 });
             } else if( posts.length !== 0 && posts[posts.length - 1]?.text !== postsRes[postsRes.length - 1]?.text ){
-                const newElements = postsRes.filter((p) => !posts.includes(p));
+                const newElements = postsRes.filter((p) => !posts.includes(p as PostsModel));
                 setPosts(postsOld => {
-                    return postsOld.concat(newElements);
+                    return postsOld.concat(newElements as PostsModel[]);
                 });
             }
             if(postsRes.length === 15){
