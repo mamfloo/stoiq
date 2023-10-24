@@ -1,10 +1,10 @@
 "use server"
 
-import CommentDto from "@/dto/commentDto";
 import { authOptions } from "@/lib/auth"
 import { getErrorMessage } from "@/lib/errorToString";
 import { commentSchema } from "@/lib/types";
 import Comment, { Comments } from "@/models/Comment";
+import Post from "@/models/Post";
 import { getServerSession } from "next-auth"
 
 export async function addNewComment(data: unknown){
@@ -32,22 +32,32 @@ export async function addNewComment(data: unknown){
     }
 
     try {
-        const doc: Comments = await Comment.create({
-            postId: parse.data.postId,
-            postTime: Date(),
-            text: parse.data.text,
-            author: {
-                profilePic: session.user.profilePic,
-                username: session.user.username
+        const mongooseSession = await Post.startSession();
+        let document;
+        const res = await mongooseSession.withTransaction(async () => {
+            const postRes = await Post.updateOne({_id: parse.data.postId},{$inc: {nComments: 1}}).exec();
+            if(postRes.modifiedCount === 0){
+                await Comment.updateOne({_id: parse.data.postId}, {$inc: {nComments: 1}}).exec()
             }
-        });
-        const rest = doc.toJSON();
-        delete rest._id;
-        delete rest.postId;
-        delete rest.author._id;
+            const doc: Comments = await Comment.create({
+                postId: parse.data.postId,
+                postTime: Date(),
+                text: parse.data.text,
+                author: {
+                    profilePic: session.user.profilePic,
+                    username: session.user.username
+                }
+            });
+            const rest = doc.toJSON();
+            delete rest._id;
+            delete rest.postId;
+            delete rest.author._id;
+            document = rest; 
+        })
+        await mongooseSession.endSession()
         return {
             success: "Comment added successfully",
-            post: rest
+            post: document
         }
     } catch (e: unknown){
         return {

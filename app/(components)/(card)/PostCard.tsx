@@ -1,27 +1,39 @@
 "use client"
 import { Posts } from '@/models/Post'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image"
-import { BiCommentDetail, BiLike, BiBookmark } from "react-icons/bi"
+import { BiCommentDetail } from "react-icons/bi"
+import { BsThreeDots } from "react-icons/bs"
+import { MdDelete, MdEditNote } from "react-icons/md"
 import CommentsList from './CommentsList'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import path from 'path'
+import Like from './Like'
+import Save from './Save'
 
 export default function PostCard({post}: {post: Posts}) {
-    const [isHovering, setIsHovering ] = useState(false);
-    const [isLiked, setIsLiked ] = useState(false);
-    const [isSaved, setIsSaved ] = useState(false);
+    const [isLiked, setIsLiked ] = useState(post.isLiked);
+    const [isSaved, setIsSaved ] = useState(post.isSaved);
     const [commentsOpen, setCommentsOpen ] = useState(false);
+    const [isEditOpen, setIsEditOpen ] = useState(false);
 
-    const router = useRouter();
+    const handle = () => setIsEditOpen(false)
 
-    //aggiungere icona like con numeri vicino , commenti = lista di nuovo component Comment che é uguale a PostCard
+    useEffect(() => {
+        if(isEditOpen){
+            window.addEventListener("touchstart", handle);
+            window.addEventListener("scroll", handle);
+            return () => {
+              window.removeEventListener("scroll", handle);
+              window.removeEventListener("touchstart", handle)
+            };
+        }
+    }, [isEditOpen]);
 
   return (
     <div 
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
+        onMouseLeave={() => {
+            setIsEditOpen(false)
+        }}
         className="bg-secondary border-2 border-accent rounded-lg p-3 flex">
         <div className=''>
             <Image 
@@ -35,27 +47,42 @@ export default function PostCard({post}: {post: Posts}) {
                 className="text-primary font-semibold">
                 @{post.author.username}
             </Link>                
-            {isHovering && (
-                <button className={`${ isSaved ? 'text-primary' : 'text-slate-300' } hover:text-primary`}>
-                    <BiBookmark size={"1.1em"}/>
-                </button>
-            )}
+                <div className='relative'>
+                    <div className='flex gap-1 relative'>
+                        <button className='text-accent'
+                            onClick={() => setIsEditOpen(!isEditOpen)}>
+                            <BsThreeDots className="hover:text-primary" size="1.3em" />
+                        </button>
+                    </div>
+                    {isEditOpen && (
+                        <div className='flex gap-2 absolute mt-1 right-7 -top-1'>
+                            <button 
+                                className='hover:text-primary '>
+                                <MdDelete size="1.3em"/>
+                            </button>
+                            <button className='hover:text-primary '>
+                                <MdEditNote size="1.5em"/>
+                            </button>
+                            
+                        </div>
+                    )}
+                </div>
             </div>
             <p>
                 {post.text}
             </p>
 
-            <div className="flex gap-4 mt-1 w-max">
-                <button className={`hover:text-primary w-auto flex gap-1 ${isLiked? 'text-primary' : 'text-slate-300'}` } >
-                    {post.nLikes !== 0 && <p>{post.nLikes}</p> }
-                    <BiLike className="inline-block mt-[3px]" size={"1.1em"}/>
-                </button>
-                <button
-                    onClick={() => setCommentsOpen(!commentsOpen)} 
-                    className={`${commentsOpen ? 'text-primary' : 'text-slate-300'} hover:text-primary  w-auto flex gap-1`}>
-                    {post.nComments !== 0 && <p>{post.nComments}</p> }
-                    <BiCommentDetail className="inline-block mt-[3px]" size={"1.1em"}/>
-                </button>
+            <div className="flex gap-4 justify-between w-full">
+                <div className='flex gap-4 mt-1'>
+                    <Like nLikes={post.nLikes} isLiked={isLiked} referenceId={post._id} setIsLiked={setIsLiked}/>
+                    <button
+                        onClick={() => setCommentsOpen(!commentsOpen)} 
+                        className={`${commentsOpen ? 'text-primary' : 'text-slate-300'} hover:text-primary  w-auto flex gap-1`}>
+                        {post.nComments !== 0 && <p>{post.nComments}</p> }
+                        <BiCommentDetail className="inline-block mt-[3px]" size={"1.3em"}/><p className=''>Comment</p> 
+                    </button>
+                </div>
+                <Save isSaved={isSaved} setIsSaved={setIsSaved} referenceId={post._id}/>
             </div>
             {commentsOpen && <CommentsList parentId={post._id}/>}
         </div>

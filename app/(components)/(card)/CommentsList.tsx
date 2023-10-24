@@ -11,10 +11,12 @@ import { TCommentSchema, TNewPostSchema, commentSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { addNewComment, getComments } from '@/app/(serverActions)/commentAction';
+import { Session } from 'next-auth';
 
 export default function CommentsList({parentId}: {parentId: string}) {
   const [ commentsList, setCommentsList ] = useState<Comments[]>([]);
   const [ imgAvatar, setImgAvatar ] = useState("default.png");
+  const [ session, setSession ] = useState<Session | null>();
 
   const {
     register,
@@ -30,8 +32,8 @@ export default function CommentsList({parentId}: {parentId: string}) {
         const session = await getSession()
         if(session) {
           setImgAvatar(session.user.profilePic)
+          setSession(session);
         };
-        console.log(session)
       }
       findSession();
     }, [])
@@ -48,12 +50,39 @@ export default function CommentsList({parentId}: {parentId: string}) {
     getAllComment();    
   }, [])
 
+  async function deleteComment(commentId: string){
+    const res = await fetch("/comment/delete", {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        username: session?.user.username,
+        commentId: commentId,
+        postId: parentId
+      })
+    })
+    const body = await res.json();
+    if(res.ok){
+      setCommentsList(commentsList.filter(c => {
+        if(c._id.toString() === commentId){
+          return true;
+        }
+        return false;
+      }))
+      toast.success(body.message)
+    } else {
+      toast.error(body.message)
+    }
+  }
+
   async function newComment(schema: TCommentSchema){
     schema.postId = parentId;
-    const res = await addNewComment(schema)
+    const res = await addNewComment(schema);
     if(res.errors){
       toast.error(res.errors);
-    } else {
+    } else if(res.post){
+      console.log(res)
       setCommentsList(commentsList.concat(res.post as Comments))
       reset({text: ""})
     }
@@ -63,7 +92,7 @@ export default function CommentsList({parentId}: {parentId: string}) {
     <div className=' w-full'>
       <div className='flex flex-col'>
         {commentsList.map((c, i) => (
-          <Comment key={i} comment={c}/>
+          <Comment key={i} comment={c} username={session?.user.username || null} eliminate={deleteComment}/>
         ))} 
       </div>
       <form 

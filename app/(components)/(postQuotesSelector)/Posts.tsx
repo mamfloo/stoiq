@@ -13,6 +13,7 @@ import Image from "next/image";
 export default function Posts({posts} : {posts: Posts[]}) {
     const [ imgAvatar, setImgAvatar ] = useState("default.png");
 
+
     useEffect(() => {
         const findSession = async () => {
           const session = await getSession()
@@ -22,10 +23,6 @@ export default function Posts({posts} : {posts: Posts[]}) {
         }
         findSession();
       }, [])
-
-    useEffect(() => {
-      //todo chimare endpoint che mi ritorna lista like e saved passando come parametro id dei post
-    }, [])
 
     const {
         register,
@@ -42,6 +39,7 @@ export default function Posts({posts} : {posts: Posts[]}) {
         if(result.errors){
             toast.error(result?.errors)
         } else {
+          console.log(result.post)
             posts.unshift(result.post as Posts);
             reset({text: ""});
         }

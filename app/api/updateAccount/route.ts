@@ -37,8 +37,6 @@ export async function POST(req: Request){
     } 
     try { 
         if(session.user.username !== result.data.username || session.user.bio !== result.data.bio){
-            /* const doc = await Account.updateOne({email: session.user.email}, 
-                {username: daParsare.username, bio: daParsare.bio}); */
             const mongooseSession = await Account.startSession();
             await mongooseSession.withTransaction(async () => {
                 const doc = await Account.updateOne({email: session.user.email}, 

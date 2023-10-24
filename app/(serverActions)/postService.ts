@@ -3,7 +3,9 @@
 import { authOptions } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/errorToString";
 import { newPostSchema } from "@/lib/types";
+import Like from "@/models/Like";
 import Post, { Posts } from '@/models/Post';
+import Saved from "@/models/Saved";
 import { getServerSession } from "next-auth";
 
 export async function addNewPost(data: unknown){
@@ -29,6 +31,8 @@ export async function addNewPost(data: unknown){
             postTime: Date.now(),
             nLikes: 0,
             nComments: 0,
+            isLiked: false,
+            isSaved: false,
             author: {
                 profilePic: session.user.profilePic,
                 username: session.user.username
@@ -36,7 +40,7 @@ export async function addNewPost(data: unknown){
         }
         const resultDb: Posts = await Post.create(newPost);
         const postData = resultDb.toJSON();
-        delete postData._id;
+        postData._id = postData._id.toString();
         delete postData.author._id;
         return {
             success: "New post created",
@@ -50,14 +54,39 @@ export async function addNewPost(data: unknown){
 }
 
 export async function getPosts(page: number, count: number){
+    const session = await getServerSession(authOptions);
     try{
         const res: Posts[] = await Post.find({}, {author: {_id: 0}}).sort({postTime: -1}).skip(page * count).limit(count).lean();
-        return res.map(r => (
-            {
-                ...r,
-                _id: r._id.toString()
-            }
-        ));
+        if(!session){
+            return res.map(r => (
+                {
+                    ...r,
+                    _id: r._id.toString(),
+                }
+            ));
+        } else {
+            const listIdPost: string[] = res.map(p => (p._id))
+            const likes = await Like.find({referenceId: {$in: listIdPost}}).then(l => l.map(i => (i.referenceId.toString())));
+            const saves = await Saved.find({accountId: session.user.id, referenceId: {$in: listIdPost}},).then(l => l.map(i => (i.referenceId.toString())));
+            const result = res.map(p => {
+                let isLiked = false;
+                let isSaved = false;
+                if(likes.includes(p._id.toString())){
+                    isLiked = true;
+
+                }
+                if(saves.includes(p._id.toString())){
+                    isSaved = true;
+                }
+                return {
+                    ...p,
+                    _id: p._id.toString(),
+                    isLiked: isLiked,
+                    isSaved: isSaved
+                }
+            });
+            return result;
+        }
     } catch (e){
         return {
             errors: getErrorMessage(e)

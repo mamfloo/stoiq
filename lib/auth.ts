@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
                 username: user.username,
                 profilePic: user.profilePic,
                 bio: user.bio,
-                id: user,
+                id: user.id,
                 registerDate: user.registerDate
             }
         }

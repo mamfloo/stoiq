@@ -1,12 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
 export interface Likes extends mongoose.Document {
     referenceId: string,  //post or comment
     likeTime: Date,
-    author: {
-        profilePic: string,
-        username: string
-    }
+    accountId: string
 }
 
 const LikeSchema = new mongoose.Schema<Likes>({
@@ -18,17 +15,8 @@ const LikeSchema = new mongoose.Schema<Likes>({
         type: Date,
         default: Date.now,
     },
-    author: {
-        type: {
-            profilePic: {
-                type: String,
-                required: true
-            },
-            username: {
-                type: String,
-                required: true
-            }
-        },
+    accountId: {
+        type: String,
         required: true
     }
 })

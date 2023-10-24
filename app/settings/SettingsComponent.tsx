@@ -50,7 +50,7 @@ export default function SettingsComponent() {
     if(selectedImage) {
       tdata.set("profilePicData", selectedImage);
     }
-    const req = await fetch("http://localhost:3000/api/updateAccount", {
+    const req = await fetch("/api/updateAccount", {
       method: "POST",
       body: tdata,
     });

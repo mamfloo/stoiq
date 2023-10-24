@@ -5,6 +5,8 @@ export interface Posts extends mongoose.Document {
     postTime: Date,
     nLikes: number,
     nComments: number,
+    isLiked: boolean,
+    isSaved: boolean,
     author: {
         profilePic: string,
         username: string
@@ -26,6 +28,16 @@ const PostSchema = new mongoose.Schema<Posts>({
     },
     nComments: {
         type: Number
+    },
+    isLiked: {
+        type: Boolean,
+        default: true,
+        required: true
+    },
+    isSaved: {
+        type: Boolean,
+        default: true,
+        required: true
     },
     author: {
         type: {
