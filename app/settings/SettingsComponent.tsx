@@ -97,7 +97,7 @@ export default function SettingsComponent() {
               <p className='text-red-500'>{errors.bio.message}</p>
             )}
         </div>
-        <button type='submit' disabled={isSubmitting} className='bg-primary p-2 rounded-lg text-black px-6 hover:text-white mt-5 block'>Submit</button>
+        <button type='submit' disabled={isSubmitting} className='bg-primary p-2 rounded-lg text-black px-6 hover:text-white mt-5 block text-lg'>Submit</button>
       </form>
     </div>
   )

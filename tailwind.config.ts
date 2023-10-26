@@ -14,7 +14,7 @@ const config: Config = {
         'background': '#171717',
         'primary': '#48937e',
         'secondary': '#1e1e1e',
-        'accent': '#a7a7a7',
+        'accent': '#535353',
         'tertiary': '#262626'
        },
       fontSize: {

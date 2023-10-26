@@ -119,7 +119,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
             <div className='flex justify-center  flex-col'>
             <button disabled={isSubmitting} 
               type='submit'
-              className='bg-primary px-10 py-3 rounded-lg text-black'>Register</button>
+              className='bg-primary px-10 py-3 rounded-lg text-black text-lg'>Register</button>
             <button className='mt-3' onClick={openLoginPopUp}>Already have an acount? Login!</button>
           </div>
         </form>     

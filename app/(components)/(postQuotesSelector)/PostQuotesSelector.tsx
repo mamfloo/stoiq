@@ -80,17 +80,17 @@ export default function PostQuotesSelector() {
 
   return (
     <>
-        <div  className='flex gap-1 -mt-2'>
+        <div  className='flex gap-2 mt-1'>
             <button
                 onClick={() => startTransition(() => getP())} 
                 disabled={isPending}
-                className='text-text bg-secondary w-full py-2 rounded-lg border-2 border-accent hover:text-primary'>posts</button>
+                className='text-text bg-secondary w-full py-2 pb-3 rounded-lg border-2 border-primary hover:text-primary text-xl'>posts</button>
             <button 
                 onClick={() => {if(state !== 1) startTransition(() => getQ())}}
                 disabled={isPending}
-                className='text-text bg-secondary w-full py-2 rounded-lg border-2 border-accent hover:text-primary'>quotes</button>
+                className='text-text bg-secondary w-full py-2 pb-3 rounded-lg border-2 border-primary hover:text-primary text-xl '>quotes</button>
         </div>
-        {state===0 && <Posts posts={posts}/>}
+        {state===0 && <Posts posts={posts} setPosts={setPosts}/>}
         {state===1 && <Quotes quotes={quotes}/>}
         <div ref={ref} className='h-1'></div>
         {isFetching && <div className='mx-auto mt-2 h-16 w-16 animate-spin rounded-full border-t border-accent'></div>}

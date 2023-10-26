@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { getErrorMessage } from "@/lib/errorToString";
 import { commentSchema } from "@/lib/types";
 import Comment, { Comments } from "@/models/Comment";
+import Like from "@/models/Like";
 import Post from "@/models/Post";
 import { getServerSession } from "next-auth"
 
@@ -49,10 +50,8 @@ export async function addNewComment(data: unknown){
                 }
             });
             const rest = doc.toJSON();
-            delete rest._id;
-            delete rest.postId;
             delete rest.author._id;
-            document = rest; 
+            document = JSON.stringify(rest)
         })
         await mongooseSession.endSession()
         return {
@@ -67,14 +66,35 @@ export async function addNewComment(data: unknown){
 }
 
 export async function getComments(id: string) {
+    const session = await getServerSession(authOptions);
     try {
         const doc: Comments[] = await Comment.find({postId: id}, {author: {_id: 0}}).lean()
-        return {success: doc.map(c => (
-            {
-                ...c,
-                _id: c._id.toString(),
-                postId: c.postId.toString() 
-            }))}
+        if(!session){
+            return {success: doc.map(c => (
+                {
+                    ...c,
+                    _id: c._id.toString(),
+                    postId: c.postId.toString() 
+                })
+            )}
+        }
+        const listIdComment: string[] = doc.map(c => (c._id))
+        const likes = await Like.find({referenceId: {$in: listIdComment}}).then(l => l.map(i => (i.referenceId.toString())));
+        const result = doc.map(p => {
+            let isLiked = false;
+            if(likes.includes(p._id.toString())){
+                isLiked = true;
+            }
+            return {
+                ...p,
+                _id: p._id.toString(),
+                postId: p.postId.toString(),
+                isLiked: isLiked,
+            }
+        });
+        return {
+            success: result
+        };
     } catch(e){
         return {
             errors: getErrorMessage(e),

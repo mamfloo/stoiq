@@ -56,7 +56,7 @@ export default function Login({openRegisterPopUp, afterLoginOrRegister}: {openRe
               )}
           </div>
           <div className='flex justify-center flex-col'>
-            <button type='submit' className='bg-primary px-10 py-3 rounded-lg text-black'>Login</button>
+            <button type='submit' className='bg-primary px-10 py-3 rounded-lg text-black text-lg'>Login</button>
             <button className='mt-3' onClick={openRegisterPopUp}>Don't have an account? Register now!</button>
           </div>
         </form>

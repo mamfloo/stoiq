@@ -3,7 +3,8 @@ import React from 'react'
 import toast from 'react-hot-toast';
 import { BiLike } from 'react-icons/bi'
 
-export default function Like({nLikes, isLiked, referenceId, setIsLiked}: {nLikes: number, isLiked: boolean, referenceId: string, setIsLiked: (b: boolean) => void}) {
+export default function Like({nLikes, isLiked, referenceId, setIsLiked, setNlikes, includeIcon = true}: 
+    {nLikes: number, isLiked: boolean, referenceId: string, setIsLiked: (b: boolean) => void, setNlikes: React.Dispatch<React.SetStateAction<number>>, includeIcon?: boolean}) {
 
     async function like(){
         const res = await fetch("/api/like", {
@@ -17,7 +18,13 @@ export default function Like({nLikes, isLiked, referenceId, setIsLiked}: {nLikes
         })
         if(res.ok){
             const final = await res.json()
-            console.log(final.message)
+            setNlikes((n: number) => {
+                if(isLiked){
+                    return n-1
+                } else {
+                    return n+1
+                }
+                })
             setIsLiked(!isLiked);
         } else {
             const final = await res.json()
@@ -29,9 +36,12 @@ export default function Like({nLikes, isLiked, referenceId, setIsLiked}: {nLikes
     <div>
         <button 
             onClick={like}
-            className={`hover:text-primary w-auto flex gap-1 ${isLiked? 'text-primary' : 'text-slate-300'}` } >
+            className={`hover:text-primary w-auto flex gap-1 text-lg ${isLiked? 'text-primary' : 'text-slate-300'}` } >
             {nLikes !== 0 && <p>{nLikes}</p> }
-            <BiLike className="inline-block" size={"1.3em"}/> Like
+            {includeIcon &&
+                <BiLike className="inline-block" size={"1.3em"}/> 
+            }
+            Like
         </button>
     </div>
   )

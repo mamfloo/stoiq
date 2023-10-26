@@ -6,6 +6,7 @@ export interface Comments extends mongoose.Document {
     text: string,
     nLikes: number,
     nComments: number,
+    isLiked: boolean,
     author: {
         profilePic: string,
         username: string
@@ -34,6 +35,11 @@ const CommentSchema = new mongoose.Schema<Comments>({
         type: Number,
         required: true,
         default: 0
+    },
+    isLiked: {
+        type: Boolean,
+        required: true,
+        default: false
     },
     author: {
         type: {

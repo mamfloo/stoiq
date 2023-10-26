@@ -79,15 +79,15 @@ export default function Navbar() {
   
 
   return (
-    <div className='sticky top-0 flex gap-2 bg-secondary justify-between px-1 items-center'>
+    <div className='top-0 flex gap-2 bg-secondary justify-between px-1 items-center z-10'>
       <div>
         {session && 
           <div>
             <button 
-              onClick={() => navigateTo("saved")}
+              onClick={() => navigateTo("/saved")}
               className='bg-secondary'>
-              <div className='p-3 hover:text-primary'>
-                <BiBookmark size="1.8em" />
+              <div className='p-3 hover:text-primary text-slate-300'>
+                <BiBookmark size="2em" />
               </div>
             </button>
           </div>
@@ -122,17 +122,17 @@ export default function Navbar() {
                 className="flex flex-col absolute gap-3 right-1/4 bg-secondary border-2 border-accent rounded-lg p-3 px-5 -mt-3">
                 <button 
                   onClick={() => navigateTo("/user/" + session.user.username)}
-                  className="flex content-center items-center hover:text-primary">
+                  className="flex content-center items-center hover:text-primary text-lg">
                   <div className="inline-block align-bottom">< VscAccount size={"1.5em"} /></div>
                   <p className="mb-1 ml-1">profile</p>
                 </button>
                 <button 
                   onClick={() => navigateTo("/settings")}
-                  className="flex content-center items-center hover:text-primary">
+                  className="flex content-center items-center hover:text-primary text-lg">
                   <div className="inline-block align-bottom">< FiSettings size={"1.5em"} /></div>
                   <p className="mb-1 ml-1">settings</p>
                 </button>
-                <button className="flex content-center item hover:text-primary"
+                <button className="flex content-center item hover:text-primary text-lg"
                   onClick={() => signOut()}>
                   <div className="inline-block align-bottom">< BiLogOutCircle size={"1.5em"}/></div>
                   <p className="mb-1 ml-1">logout</p>

@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Saved() {
+export default function QuotesSaved() {
   return (
     <div>
-      
+        
     </div>
   )
 }

@@ -53,10 +53,15 @@ export async function addNewPost(data: unknown){
     }
 }
 
-export async function getPosts(page: number, count: number){
+export async function getPosts(page: number, count: number, username?: string){
     const session = await getServerSession(authOptions);
     try{
-        const res: Posts[] = await Post.find({}, {author: {_id: 0}}).sort({postTime: -1}).skip(page * count).limit(count).lean();
+        let res: Posts[];
+        if(!username){
+            res = await Post.find({}, {author: {_id: 0}}).sort({postTime: -1}).skip(page * count).limit(count).lean();
+        } else {
+            res = await Post.find({"author.username": username}, {author: {_id: 0}}).sort({postTime: -1}).skip(page * count).limit(count).lean();
+        }
         if(!session){
             return res.map(r => (
                 {
@@ -73,7 +78,6 @@ export async function getPosts(page: number, count: number){
                 let isSaved = false;
                 if(likes.includes(p._id.toString())){
                     isLiked = true;
-
                 }
                 if(saves.includes(p._id.toString())){
                     isSaved = true;

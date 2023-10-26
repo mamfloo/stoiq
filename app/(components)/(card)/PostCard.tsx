@@ -10,81 +10,86 @@ import Link from 'next/link'
 import Like from './Like'
 import Save from './Save'
 
-export default function PostCard({post}: {post: Posts}) {
+export default function PostCard({post, deletePost, username}: {post: Posts, deletePost: (postId: string) => void, username: string | undefined}) {
     const [isLiked, setIsLiked ] = useState(post.isLiked);
     const [isSaved, setIsSaved ] = useState(post.isSaved);
     const [commentsOpen, setCommentsOpen ] = useState(false);
     const [isEditOpen, setIsEditOpen ] = useState(false);
+    const [nLikes, setNlikes ] = useState(post.nLikes);
+    const [nComments, setNcomments ] = useState(post.nComments)
 
     const handle = () => setIsEditOpen(false)
 
     useEffect(() => {
         if(isEditOpen){
-            window.addEventListener("touchstart", handle);
             window.addEventListener("scroll", handle);
             return () => {
               window.removeEventListener("scroll", handle);
-              window.removeEventListener("touchstart", handle)
             };
         }
     }, [isEditOpen]);
+
 
   return (
     <div 
         onMouseLeave={() => {
             setIsEditOpen(false)
         }}
-        className="bg-secondary border-2 border-accent rounded-lg p-3 flex">
+        className="bg-secondary border-2 border-accent rounded-lg pt-4 pb-2 px-3 flex">
         <div className=''>
             <Image 
                 className="rounded-full aspect-square"
-                src={"/img/avatars/" + post.author.profilePic} alt={"profile image"} width={45} height={45}/>
+                src={"/img/avatars/" + post.author.profilePic} alt={"profile image"} width={50} height={50}/>
         </div>
         <div className='ml-2 w-full'>
-            <div className='flex justify-between w-full'>
+            <div className='flex justify-between w-full -mt-1'>
     	    <Link 
                 href={"/user/" + post.author.username}
-                className="text-primary font-semibold">
+                className="text-primary font-semibold text-lg">
                 @{post.author.username}
-            </Link>                
+            </Link>
+            {username === post.author.username && (
                 <div className='relative'>
                     <div className='flex gap-1 relative'>
                         <button className='text-accent'
                             onClick={() => setIsEditOpen(!isEditOpen)}>
-                            <BsThreeDots className="hover:text-primary" size="1.3em" />
+                            <BsThreeDots className="hover:text-primary" size="1.7em" />
                         </button>
                     </div>
-                    {isEditOpen && (
+                    {isEditOpen  && (
                         <div className='flex gap-2 absolute mt-1 right-7 -top-1'>
                             <button 
-                                className='hover:text-primary '>
-                                <MdDelete size="1.3em"/>
+                                onClick={() => deletePost(post._id)}
+                                className='hover:text-primary text-slate-300'>
+                                <MdDelete size="2em"/>
                             </button>
-                            <button className='hover:text-primary '>
+                            {/*<button className='hover:text-primary '>
                                 <MdEditNote size="1.5em"/>
-                            </button>
-                            
+                            </button> */}
                         </div>
                     )}
                 </div>
-            </div>
-            <p>
+            )}                
+        </div>
+            <p className='pt-1 mb-1'>
                 {post.text}
             </p>
 
             <div className="flex gap-4 justify-between w-full">
                 <div className='flex gap-4 mt-1'>
-                    <Like nLikes={post.nLikes} isLiked={isLiked} referenceId={post._id} setIsLiked={setIsLiked}/>
+                    <Like nLikes={nLikes} isLiked={isLiked} referenceId={post._id} setIsLiked={setIsLiked} setNlikes={setNlikes}/>
                     <button
                         onClick={() => setCommentsOpen(!commentsOpen)} 
                         className={`${commentsOpen ? 'text-primary' : 'text-slate-300'} hover:text-primary  w-auto flex gap-1`}>
-                        {post.nComments !== 0 && <p>{post.nComments}</p> }
-                        <BiCommentDetail className="inline-block mt-[3px]" size={"1.3em"}/><p className=''>Comment</p> 
+                        {nComments !== 0 && <p className='text-lg'>{nComments}</p> }
+                        <BiCommentDetail className="inline-block mt-[3px] text-lg" size={"1.3em"}/><p className='text-lg'>Comment</p> 
                     </button>
                 </div>
-                <Save isSaved={isSaved} setIsSaved={setIsSaved} referenceId={post._id}/>
+                {username && (
+                    <Save isSaved={isSaved} setIsSaved={setIsSaved} referenceId={post._id}/>
+                )}
             </div>
-            {commentsOpen && <CommentsList parentId={post._id}/>}
+            {commentsOpen && <CommentsList parentId={post._id} setNcomments={setNcomments}/>}
         </div>
     </div>
   )

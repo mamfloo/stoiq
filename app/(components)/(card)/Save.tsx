@@ -30,8 +30,8 @@ export default function Save({isSaved, setIsSaved, referenceId}: {isSaved: boole
   return (
     <button 
         onClick={save}
-        className={`${ isSaved ? 'text-primary' : 'text-slate-300' } hover:text-primary`}>
-        <BiBookmark size={"1.3em"}/>
+        className={`${ isSaved ? 'text-primary' : 'text-accent' } hover:text-primary`}>
+        <BiBookmark size={"2em"}/>
     </button>
   )
 }
