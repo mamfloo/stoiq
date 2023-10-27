@@ -30,7 +30,7 @@ export default function Navbar() {
       if(session) {
         setSession(session)
       };
-      console.log(session)
+
     }
     findSession();
   }, [isLoginOpen, isRegisterOpen])

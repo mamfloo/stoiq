@@ -35,10 +35,8 @@ export async function POST(req: Request) {
             isActivated: true,
             registerDate: Date.now()
         });
-        console.log()
         return NextResponse.json({body: resultDb}, {status: 200});
     } catch (e) {
-        console.log(e);
         return NextResponse.json({error: getErrorMessage(e)});
     }
     

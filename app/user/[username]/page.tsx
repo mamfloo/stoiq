@@ -56,7 +56,6 @@ export default function page({params}: {params: {username: string}} ) {
           toast.error(postsRes.errors)
       }
       setIsFetching(false);
-      console.log(posts)
   }
 
   async function deletePost(postId: string){
@@ -95,7 +94,6 @@ export default function page({params}: {params: {username: string}} ) {
         <div className='aspect-square'>
           <Image className='rounded-full border-2 border-primary aspect-square' 
             src={'/img/avatars/' + user?.profilePic} alt={'avatar image stoiq'} height={100} width={100}/>
-
         </div>
         <div className='flex flex-col gap-1 justify-center'>
           <p className='text-primary font-semibold text-lg flex'>@{user?.username} <Link className='mt-1 ml-1 text-white' href={"/settings"}>{isSameUser && <TbEdit/>}</Link></p>
@@ -106,8 +104,8 @@ export default function page({params}: {params: {username: string}} ) {
         </div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Array.isArray(posts) && posts.map((p, i) => (
-            <PostCard key={i} post={p as Posts} username={sessionUser?.user.username} deletePost={deletePost}/>
+        {Array.isArray(posts) && posts.map((p) => (
+            <PostCard key={p._id} post={p as Posts} username={sessionUser?.user.username} deletePost={deletePost}/>
           ))}
       </div>
       {/* <div ref={ref} className='h-1'></div>             without this it does not reqest any other post when it reaches the botto of the page */}

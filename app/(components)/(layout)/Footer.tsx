@@ -2,19 +2,17 @@ import Account from '@/models/Account'
 import Link from 'next/link'
 import React from 'react'
 import Image from "next/image"
-import { AiOutlineCalendar } from 'react-icons/Ai';
+import dbConnect from '@/lib/mongo/connect';
 
 export default async function Footer() {
 
   const users = await getUsers();
-  console.log(users)
-
 
   return (
     <div className='flex flex-col gap-2 w-full'>
         <div>
             <h2 className='text-primary text-xl mb-2'>Active Users</h2>
-            {users.map((a, i) => (
+            {users?.map((a, i) => (
                 <div key={i} className='flex gap-3 rounded-lg border-accent border-2 mb-2 p-3'>
                     <div className='aspect-square'>
                         <Image className='rounded-full border-2 border-primary aspect-square' 
@@ -43,5 +41,11 @@ export default async function Footer() {
 }
 
 async function getUsers(){
-    return await Account.aggregate([{$sample: {size: 5}}]).exec();
+    //TODO controllare prima la connessione
+    try {
+        await dbConnect();
+        return await Account.aggregate([{$sample: {size: 5}}]).exec();
+    } catch(e){
+        throw Error("Could not connect to the db");
+    }
 }

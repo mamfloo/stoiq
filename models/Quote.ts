@@ -5,6 +5,7 @@ export interface Quotes extends mongoose.Document {
     quote: string,
     nLikes: number,
     nComments: number,
+    isSaved: boolean
 }
 
 const QuoteSchema = new mongoose.Schema<Quotes>({
@@ -18,6 +19,11 @@ const QuoteSchema = new mongoose.Schema<Quotes>({
         required: [true, "Please provide a quote"],
         maxlength: [1000, "Quote cannot be longer than 1000 characters"]
     },
+    isSaved: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 })
 
 export default mongoose.models.Quotes || mongoose.model<Quotes>("Quotes", QuoteSchema)

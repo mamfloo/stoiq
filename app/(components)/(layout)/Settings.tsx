@@ -42,7 +42,7 @@ export default async function Settings() {
             </div>
         )}
         <LoginLogout session={session}/>      
-        <div className='hidden md:inline-block xl:hidden text-end fixed bottom-1'>
+        <div className='hidden md:inline-block lg:hidden text-end fixed bottom-1'>
             <div className=' flex flex-col'>
                 <Link href={"/terms"} className='hover:underline'>Terms and Conditions</Link>
                 <Link href={"/about"} className='hover:underline'>About</Link>

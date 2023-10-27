@@ -13,8 +13,7 @@ export async function POST(req: Request){
             const listIdPost: string[] = await req.json();
             const likes = await Like.find({referenceId: {$in: listIdPost}}).then(l => l.map(i => ({id: i._id})));
             const saves = await Saved.find({accountId: session.user.id, referenceId: {$in: listIdPost}},).then(l => l.map(i => ({id: i._id})));
-            console.log(likes);
-            console.log(saves);
+
             return NextResponse.json({liked: likes, saved: saves}, {status: 200})
         } catch (e) {
             return NextResponse.json({message: getErrorMessage(e)}, {status: 400})

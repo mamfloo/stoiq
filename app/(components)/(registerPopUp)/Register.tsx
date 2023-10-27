@@ -55,7 +55,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
         })
       }
     } else if(responseData.error) {
-      console.log(responseData.error)
+
       toast.error(responseData.error)
     } else {
       toast.success("Account created successfully!")

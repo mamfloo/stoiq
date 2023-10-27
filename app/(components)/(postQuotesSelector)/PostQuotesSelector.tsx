@@ -30,7 +30,7 @@ export default function PostQuotesSelector() {
         const quotes = await getQuotes(pageQuotes, 15);
         if(Array.isArray(quotes)) {
             setQuotes(qOld => (
-                qOld.concat(quotes)
+                qOld.concat(quotes as QuotesModel[])
             ));
             setPageQuotes(pageQuotes + 1);
         } else {

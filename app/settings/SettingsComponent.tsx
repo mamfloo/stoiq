@@ -32,9 +32,6 @@ export default function SettingsComponent() {
     if(e.target.files && e.target.files[0]){
       const file = e.target.files[0];
       setSelectedImage(file)
-      console.log(e.target.files)
-      console.log(file)
-
       const reader = new FileReader();
       reader.readAsDataURL(file)
       reader.onload = () => {
@@ -57,7 +54,6 @@ export default function SettingsComponent() {
     const updateResult = await req.json();
     if(updateResult.errors){
       toast.error(updateResult.errors)
-      console.log(updateResult.errors)
     } else if(updateResult.success){
       update();
       toast.success(updateResult.success);

@@ -43,14 +43,18 @@ export default function Posts({posts, setPosts} : {posts: Posts[], setPosts: Rea
         if(result.errors){
             toast.error(result?.errors)
         } else {
-            console.log(result.post)
-            //posts.unshift(result.post as Posts)
-            setPosts(oldPosts => {
-              oldPosts.unshift(result.post as Posts)
-              return oldPosts;
-            });
-            reset({text: ""});
-            
+          let finale: Posts;
+          if(result.post){
+            finale = JSON.parse(result.post)
+          }
+          console.log(result.post)
+          //posts.unshift(result.post as Posts)
+          setPosts(oldPosts => {
+            const newPost = [finale, ...oldPosts];
+            console.log(newPost)
+            return newPost;
+          });
+          reset({text: ""});
         }
         router.refresh();
       }
@@ -95,8 +99,8 @@ export default function Posts({posts, setPosts} : {posts: Posts[], setPosts: Rea
             </div>
         </div>
         <div className="flex flex-col gap-3 mt-4">
-            {posts.map((p, i) => (
-            <PostCard key={i} post={p} deletePost={deletePost} username={session?.user.username}/>
+            {posts.map((p) => (
+            <PostCard key={p._id} post={p} deletePost={deletePost} username={session?.user.username}/>
             ))} 
         </div>
     </>

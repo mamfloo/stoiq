@@ -26,7 +26,7 @@ export async function DELETE(req: Request) {
         await mongooseSession.endSession();
         return NextResponse.json({message: "Post deleted"}, {status: 200})
     }catch(e){
-        console.log(getErrorMessage(e));
+
         return NextResponse.json({message: getErrorMessage(e)}, {status: 400})
     }
 }

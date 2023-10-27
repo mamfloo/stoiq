@@ -40,11 +40,10 @@ export async function addNewPost(data: unknown){
         }
         const resultDb: Posts = await Post.create(newPost);
         const postData = resultDb.toJSON();
-        postData._id = postData._id.toString();
-        delete postData.author._id;
+        
         return {
             success: "New post created",
-            post: postData
+            post: JSON.stringify(postData)
             }
     } catch (e){
         return {

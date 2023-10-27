@@ -91,8 +91,8 @@ export default function CommentsList({parentId, setNcomments}: {parentId: string
   return (
     <div className='mt-1 w-full'>
       <div className='flex flex-col'>
-        {commentsList.map((c, i) => (
-          <Comment key={i} comment={c} username={session?.user.username || null} eliminate={deleteComment}/>
+        {commentsList.map((c) => (
+          <Comment key={c._id} comment={c} username={session?.user.username || null} eliminate={deleteComment}/>
         ))} 
       </div>
       <form 

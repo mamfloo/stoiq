@@ -3,7 +3,7 @@ import Image from "next/image"
 import { Comments } from '@/models/Comment'
 import Link from 'next/link';
 import { BsThreeDots } from 'react-icons/bs';
-import { MdDelete, MdEditNote } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 import Like from './Like';
 
 export default function Comment({comment, username, eliminate}: {comment: Comments, username: string | null, eliminate: (commentId: string) => void}) {
