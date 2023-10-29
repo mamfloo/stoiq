@@ -19,10 +19,12 @@ export async function POST(req: Request) {
         )
         
     } 
+    console.log(result.data)
     if(await Account.findOne({username: result.data.username})) {
         return NextResponse.json({error: "Username already in use"});
     }
-    if(await Account.findOne({email: result.data.password})) {
+    console.log(await Account.findOne({email: result.data.email}))
+    if(await Account.findOne({email: result.data.email})) {
         return NextResponse.json({error: "Email already in use"});
     }
     try {
@@ -33,7 +35,8 @@ export async function POST(req: Request) {
             password: hashedPassword,
             profilePic: "default.png",
             isActivated: true,
-            registerDate: Date.now()
+            registerDate: Date.now(),
+            bio: "something funny",
         });
         return NextResponse.json({body: resultDb}, {status: 200});
     } catch (e) {

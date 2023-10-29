@@ -7,7 +7,8 @@ export interface Accounts extends mongoose.Document{
     password: string,
     profilePic: string,
     isActivated: boolean,
-    registerDate: Date, 
+    registerDate: Date,
+    quotePage: number 
 }
 
 const AccountSchema = new mongoose.Schema<Accounts>({
@@ -42,6 +43,11 @@ const AccountSchema = new mongoose.Schema<Accounts>({
     registerDate: {
         type: Date,
         required: true
+    },
+    quotePage: {
+        type: Number,
+        required: true,
+        default: 0
     }
 })
 

@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 export interface Saved extends mongoose.Document {
     referenceId: string,
     saveTime: Date,
-    accountId: string
+    accountId: string,
+    type: string
 }
 
 const SavedSchema = new mongoose.Schema<Saved>({
@@ -16,6 +17,10 @@ const SavedSchema = new mongoose.Schema<Saved>({
         default: Date.now,
     },
     accountId: {
+        type: String,
+        required: true
+    },
+    type: {
         type: String,
         required: true
     }

@@ -45,7 +45,8 @@ export const authOptions: NextAuthOptions = {
               email: existingUser.email,
               profilePic: existingUser.profilePic,
               bio: existingUser.bio,
-              registerDate: existingUser.registerDate.toLocaleDateString()
+              registerDate: existingUser.registerDate.toLocaleDateString(),
+              page: existingUser.page
           }
       }
   })
@@ -58,6 +59,7 @@ export const authOptions: NextAuthOptions = {
             token.username = account.username;
             token.bio = account.bio;
             token.profilePic = account.profilePic;
+            token.page = account.page;
         }
 
         if(user){
@@ -67,7 +69,8 @@ export const authOptions: NextAuthOptions = {
                 profilePic: user.profilePic,
                 bio: user.bio,
                 id: user.id,
-                registerDate: user.registerDate
+                registerDate: user.registerDate,
+                page: user.page
             }
         }
         return token;
@@ -81,7 +84,8 @@ export const authOptions: NextAuthOptions = {
                 profilePic: token.profilePic,
                 bio: token.bio,
                 id: token.id,
-                registerDate: token.registerDate
+                registerDate: token.registerDate,
+                page: token.page
             }
         }
     }

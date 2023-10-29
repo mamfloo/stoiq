@@ -47,11 +47,10 @@ export default function Posts({posts, setPosts} : {posts: Posts[], setPosts: Rea
           if(result.post){
             finale = JSON.parse(result.post)
           }
-          console.log(result.post)
           //posts.unshift(result.post as Posts)
           setPosts(oldPosts => {
             const newPost = [finale, ...oldPosts];
-            console.log(newPost)
+
             return newPost;
           });
           reset({text: ""});
@@ -60,7 +59,7 @@ export default function Posts({posts, setPosts} : {posts: Posts[], setPosts: Rea
       }
 
       async function deletePost(postId: string){
-        console.log(session)
+
         const result = await fetch("http://localhost:3000/api/post/delete", {
             method:"DELETE",
             headers: {

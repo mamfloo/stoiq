@@ -3,8 +3,8 @@ import React from 'react'
 import toast from 'react-hot-toast';
 import { BiLike } from 'react-icons/bi'
 
-export default function Like({nLikes, isLiked, referenceId, setIsLiked, setNlikes, includeIcon = true}: 
-    {nLikes: number, isLiked: boolean, referenceId: string, setIsLiked: (b: boolean) => void, setNlikes: React.Dispatch<React.SetStateAction<number>>, includeIcon?: boolean}) {
+export default function Like({nLikes, isLiked, referenceId, setIsLiked, setNlikes, includeIcon = true, removeLikeUnlike}: 
+    {nLikes: number, isLiked: boolean, referenceId: string, setIsLiked: (b: boolean) => void, setNlikes: React.Dispatch<React.SetStateAction<number>>, includeIcon?: boolean, removeLikeUnlike?: (id:string, n: number)=>void}) {
 
     async function like(){
         const res = await fetch("/api/like", {
@@ -20,8 +20,14 @@ export default function Like({nLikes, isLiked, referenceId, setIsLiked, setNlike
             const final = await res.json()
             setNlikes((n: number) => {
                 if(isLiked){
+                    if(removeLikeUnlike){
+                        removeLikeUnlike(referenceId, -1)
+                    }
                     return n-1
                 } else {
+                    if(removeLikeUnlike){
+                        removeLikeUnlike(referenceId, 1)
+                    }
                     return n+1
                 }
                 })

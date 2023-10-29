@@ -74,7 +74,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
       -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10'>
         <h1 className='text-primary mb-10 text-2xl text-center mt-0'>Register</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-8'>
-            <div className='flex justify-center'>
+            <div className='flex justify-center flex-col'>
               <input 
                 {...register("username")}
                 type="text" placeholder='username' 
@@ -84,7 +84,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
                   <p className='text-red-500 -mb-6'>{errors.username.message}</p>
                 )}
             </div>
-            <div className='flex justify-center'>
+            <div className='flex justify-center flex-col'>
               <input 
                 {...register("email")}
                 type="email" placeholder='email' 
@@ -94,7 +94,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
                   <p className='text-red-500 absolute'>{errors.email?.message}</p>
                 )}
               </div>
-            <div className='flex justify-center'>
+            <div className='flex justify-center flex-col'>
               <input 
                 {...register("password")}
                 type="password" placeholder='********' 
@@ -104,14 +104,14 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
                   <p className='text-red-500 absolute'>{errors.password.message}</p>
                 )}
             </div>
-            <div className='flex justify-center'>
+            <div className='flex flex-col justify-center'>
               <input 
                 {...register("confirmPassword")}
                 type="password" placeholder='********' 
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
                 {errors.confirmPassword && (
-                  <p className='text-red-500'>{errors.confirmPassword.message}</p>
+                  <p className='text-red-500 '>{errors.confirmPassword.message}</p>
                 )}
             </div>
             <label htmlFor="terms" className='text-center'><input type="checkbox" name="terms" 

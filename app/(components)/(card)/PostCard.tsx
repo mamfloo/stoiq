@@ -10,7 +10,8 @@ import Link from 'next/link'
 import Like from './Like'
 import Save from './Save'
 
-export default function PostCard({post, deletePost, username}: {post: Posts, deletePost: (postId: string) => void, username: string | undefined}) {
+export default function PostCard({post, deletePost, username, removeFromList, removeLikeUnlike, removeAddCommentNumber}: {post: Posts, deletePost: 
+    (postId: string) => void, username: string | undefined, removeFromList: (id: string) => void, removeLikeUnlike?: (id: string, n: number)=> void, removeAddCommentNumber?: (id: string, n: number)=>void} ) {
     const [isLiked, setIsLiked ] = useState(post.isLiked);
     const [isSaved, setIsSaved ] = useState(post.isSaved);
     const [commentsOpen, setCommentsOpen ] = useState(false);
@@ -28,7 +29,6 @@ export default function PostCard({post, deletePost, username}: {post: Posts, del
             };
         }
     }, [isEditOpen]);
-
 
   return (
     <div 
@@ -77,7 +77,7 @@ export default function PostCard({post, deletePost, username}: {post: Posts, del
 
             <div className="flex gap-4 justify-between w-full">
                 <div className='flex gap-4 mt-1'>
-                    <Like nLikes={nLikes} isLiked={isLiked} referenceId={post._id} setIsLiked={setIsLiked} setNlikes={setNlikes}/>
+                    <Like nLikes={nLikes} isLiked={isLiked} referenceId={post._id} setIsLiked={setIsLiked} setNlikes={setNlikes} removeLikeUnlike={removeLikeUnlike}/>
                     <button
                         onClick={() => setCommentsOpen(!commentsOpen)} 
                         className={`${commentsOpen ? 'text-primary' : 'text-slate-300'} hover:text-primary  w-auto flex gap-1`}>
@@ -86,10 +86,10 @@ export default function PostCard({post, deletePost, username}: {post: Posts, del
                     </button>
                 </div>
                 {username && (
-                    <Save isSaved={isSaved} setIsSaved={setIsSaved} referenceId={post._id}/>
+                    <Save isSaved={isSaved} setIsSaved={setIsSaved} referenceId={post._id} type='post' removeFromList={removeFromList}/>
                 )}
             </div>
-            {commentsOpen && <CommentsList parentId={post._id} setNcomments={setNcomments}/>}
+            {commentsOpen && <CommentsList parentId={post._id} setNcomments={setNcomments} removeAddCommentNumber={removeAddCommentNumber}/>}
         </div>
     </div>
   )

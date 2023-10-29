@@ -56,7 +56,7 @@ export async function addNewComment(data: unknown){
         await mongooseSession.endSession()
         return {
             success: "Comment added successfully",
-            post: document
+            comment: document
         }
     } catch (e: unknown){
         return {

@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { addNewComment, getComments } from '@/app/(serverActions)/commentAction';
 import { Session } from 'next-auth';
 
-export default function CommentsList({parentId, setNcomments}: {parentId: string, setNcomments: Dispatch<SetStateAction<number>>}) {
+export default function CommentsList({parentId, setNcomments, removeAddCommentNumber}: {parentId: string, setNcomments: Dispatch<SetStateAction<number>>, removeAddCommentNumber?: (id: string, n: number)=>void}) {
   const [ commentsList, setCommentsList ] = useState<Comments[]>([]);
   const [ imgAvatar, setImgAvatar ] = useState("default.png");
   const [ session, setSession ] = useState<Session | null>();
@@ -71,6 +71,9 @@ export default function CommentsList({parentId, setNcomments}: {parentId: string
         return false;
       }))
       setNcomments((n: number) => n-1 )
+      if(removeAddCommentNumber){
+        removeAddCommentNumber(parentId, -1)
+      }
     } else {
       toast.error(body.message)
     }
@@ -81,9 +84,12 @@ export default function CommentsList({parentId, setNcomments}: {parentId: string
     const res = await addNewComment(schema);
     if(res.errors){
       toast.error(res.errors);
-    } else if(res.post){
+    } else if(res.comment){
       setNcomments((n: number) => n+1)
-      setCommentsList(commentsList.concat(JSON.parse(res.post)))
+      if(removeAddCommentNumber){
+        removeAddCommentNumber(parentId, 1)
+      }
+      setCommentsList(commentsList.concat(JSON.parse(res.comment)))
       reset({text: ""})
     }
   }

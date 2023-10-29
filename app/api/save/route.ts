@@ -13,14 +13,16 @@ export async function POST(req: Request){
         const body = await req.json();
         const del = await Saved.findOneAndDelete({referenceId: body.referenceId, accountId: session.user.id}).exec()
         if(del){
-            return NextResponse.json({message: "Unsaved successfully"}, {status: 200});
+            return NextResponse.json({message: "Unsaved"}, {status: 200});
         } 
+        console.log(body.type)
         const add = await Saved.create({
             referenceId: body.referenceId,
             saveTime: new Date(),
-            accountId: session.user.id.toString()
+            accountId: session.user.id.toString(),
+            type: body.type
         })
-        return NextResponse.json({message: "Saved successfully"}, {status: 200});
+        return NextResponse.json({message: "Saved"}, {status: 200});
     } catch(e){
         return NextResponse.json({message: getErrorMessage(e)}, {status: 400});
     }

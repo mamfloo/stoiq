@@ -19,7 +19,7 @@ export async function POST(req: Request) {
             if(postRes.modifiedCount === 0){
                 await Comment.updateOne({_id: body.referenceId}, {$inc: {nLikes: -1}}).exec()
             }
-            return NextResponse.json({message: "Unliked successfully"}, {status: 200});
+            return NextResponse.json({message: "Unliked"}, {status: 200});
         }
         const resCreate = await Like.create({
             referenceId: body.referenceId,
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         if(postRes.modifiedCount === 0){
             await Comment.updateOne({_id: body.referenceId}, {$inc: {nLikes: 1}}).exec()
         }
-        return NextResponse.json({message: "Liked successfully"}, {status: 200});
+        return NextResponse.json({message: "Liked"}, {status: 200});
     } catch(e) {
         return NextResponse.json({message: getErrorMessage(e)}, {status:400});
     }
