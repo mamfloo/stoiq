@@ -7,11 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Loading from '../(components)/Loading';
 
 export default function SettingsComponent() {
   const [ selectedImage, setSelectedImage] = useState<File>();
   const [ previewImage, setPrivewImage ] = useState("");
   const { data: session,status, update } = useSession();
+  const [ isLoading, setIsLoading ] = useState(true);
   const router = useRouter();
 
   const {
@@ -23,9 +25,20 @@ export default function SettingsComponent() {
     resolver: zodResolver(updateAccountSchema)
   });
 
-  useEffect(() => {    
-    setValue("username", session?.user.username || "");
-    setValue("bio", session?.user.bio || "");
+  
+
+  useEffect(() => {
+    const getSess = async() => {
+      const session2 = await getSession();
+      if(session2){
+        setValue("username", session2?.user.username || "");
+        setValue("bio", session2?.user.bio || "");
+        setIsLoading(false);
+      } else {
+        router.replace("/");
+      }
+    }
+    getSess();
   })
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,41 +74,47 @@ export default function SettingsComponent() {
     }
   }
 
-  return (
-    <div className='border-2 border-accent p-3 rounded-lg'>
-      <h1 className='text-2xl ml-4'>Profile Settings</h1>
-      <form onSubmit={handleSubmit(updateAccount)}
-        className='mt-4'>
-        <div className='flex flex-col mt-4'>
-          <label htmlFor="username">Username</label>
-          <input
-            className='p-2 bg-secondary outline-none border-2 border-accent rounded-lg focus:border-primary  mt-2 cursor-pointer'
-            type="file" accept="image/*" onChange={handleImageChange} />
-        </div>
-        {previewImage !== "" && <Image src={previewImage} alt="Selected" width={120} height={120} className='rounded-full aspect-square mt-2'/>}
-        <div className='flex flex-col mt-3'>
-          <label htmlFor="username">Username</label>
-          <input 
-            {...register("username")}
-            name='username' type="text" placeholder='username' 
-            className='p-2 bg-secondary outline-none  border-2 border-accent rounded-lg focus:border-primary mt-2'/>
-            {errors.username && (
-              <p className='text-red-500'>{errors.username.message}</p>
-            )}
-        </div>
-        <div className='flex flex-col mt-4'>
-          <label htmlFor="username">Bio</label>
-          <input 
-            {...register("bio")}
-            name='bio' type="text" placeholder='bio' 
-            className='p-2 bg-secondary outline-none border-2 border-accent rounded-lg focus:border-primary  mt-2'/>
-            {errors.bio && (
-              <p className='text-red-500'>{errors.bio.message}</p>
-            )}
-        </div>
-        <button type='submit' disabled={isSubmitting} className='bg-primary p-2 rounded-lg text-black px-6 hover:text-white mt-5 block text-lg'>Submit</button>
-      </form>
-    </div>
-  )
+  if(isLoading){
+    return (
+      <Loading/>
+    )
+  }  else {
+    return (
+      <div className='border-2 border-accent p-3 rounded-lg'>
+        <h1 className='text-2xl ml-4'>Profile Settings</h1>
+        <form onSubmit={handleSubmit(updateAccount)}
+          className='mt-4'>
+          <div className='flex flex-col mt-4'>
+            <label htmlFor="username">Username</label>
+            <input
+              className='p-2 bg-secondary outline-none border-2 border-accent rounded-lg focus:border-primary  mt-2 cursor-pointer'
+              type="file" accept="image/*" onChange={handleImageChange} />
+          </div>
+          {previewImage !== "" && <Image src={previewImage} alt="Selected" width={120} height={120} className='rounded-full aspect-square mt-2'/>}
+          <div className='flex flex-col mt-3'>
+            <label htmlFor="username">Username</label>
+            <input 
+              {...register("username")}
+              name='username' type="text" placeholder='username' 
+              className='p-2 bg-secondary outline-none  border-2 border-accent rounded-lg focus:border-primary mt-2'/>
+              {errors.username && (
+                <p className='text-red-500'>{errors.username.message}</p>
+              )}
+          </div>
+          <div className='flex flex-col mt-4'>
+            <label htmlFor="username">Bio</label>
+            <input 
+              {...register("bio")}
+              name='bio' type="text" placeholder='bio' 
+              className='p-2 bg-secondary outline-none border-2 border-accent rounded-lg focus:border-primary  mt-2'/>
+              {errors.bio && (
+                <p className='text-red-500'>{errors.bio.message}</p>
+              )}
+          </div>
+          <button type='submit' disabled={isSubmitting} className='bg-primary p-2 rounded-lg text-black px-6 hover:text-white mt-5 block text-lg'>Submit</button>
+        </form>
+      </div>
+    )
+  }
 }
 

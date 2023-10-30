@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request){
     const session = await getServerSession(authOptions)
     if(!session){
-        return NextResponse.json({message: "You have to lognin first"}, {status: 400});
+        return NextResponse.json({message: "You have to login first"}, {status: 400});
     }
     try{
         const body = await req.json();

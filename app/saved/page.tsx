@@ -3,15 +3,16 @@
 import PostCard from '@/app/(components)/(card)/PostCard';
 import { Posts } from '@/models/Post';
 import { Session } from 'next-auth'
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Posts as PostsModel }  from '@/models/Post';
 import { useIntersection } from '@mantine/hooks';
-import { getPosts } from '@/app/(serverActions)/postService';
 import { getSession } from 'next-auth/react';
-import Quote, { Quotes } from '@/models/Quote';
+import { Quotes } from '@/models/Quote';
 import { getSavedByUsername } from '../(serverActions)/savedAction';
 import QuoteCard from '../(components)/(card)/QuoteCard';
+import { useRouter } from 'next/navigation';
+import Loading from '../(components)/Loading';
 
 export default function page() {
     const [ state, setState ] = useState(0);
@@ -20,17 +21,22 @@ export default function page() {
     const [ pagePosts, setPagePosts ] = useState(0);
     const [ isFetching, setIsFetching ] = useState(false);  
     const [ session, setSesson ] = useState<Session | null>();
+    const [ isLoading, setIsLoading ] = useState(true);
     let isSameUser = false;
+
+    const router = useRouter();
 
     useEffect(() => {
       const getSes = async () => {
         const session = await getSession();
         if(session){
-          console.log(session)
           setSesson(session);
           isSameUser = true;
+          getS(session!);
+          setIsLoading(false);
+        } else {
+          router.replace("/");
         }
-        getS(session!);
       }
       getSes();
     }, [])
@@ -110,30 +116,37 @@ export default function page() {
 /*   useEffect(()=>{
     if(entry?.isIntersecting) getS();
   },[entry]) */
-    
-  return (
-    <>
-    <div  className='flex gap-2 mt-1 mb-3'>
-            <button
-                onClick={() => {setState(0)}} 
-                className='text-text bg-secondary w-full py-2 pb-3 rounded-lg border-2 border-primary hover:text-primary text-xl'>posts</button>
-            <button 
-                onClick={() => {setState(1)}}
-                className='text-text bg-secondary w-full py-2 pb-3 rounded-lg border-2 border-primary hover:text-primary text-xl '>quotes</button>
-        </div>
-    <div className='flex flex-col w-full'>
-      <div className='flex flex-col gap-2'>
-        {(state === 0) && savedPosts.map((p) => (
-          <PostCard key={p._id} post={p as Posts} username={session?.user.username} deletePost={deletePost} removeFromList={removePost} removeLikeUnlike={removeLikeUnlike} removeAddCommentNumber={removeAddCommentNumber}/>
-        ))}
-        {(state === 1) && savedQuotes.map(q => (
-          <QuoteCard quote={q} removeFromList={removeQuote}/>
-        ))}
+
+  
+  if(isLoading){
+    return (
+      <Loading/>
+    )
+  }  else {
+    return (
+      <>
+      <div  className='flex gap-2 mt-1 mb-3'>
+        <button
+            onClick={() => {setState(0)}} 
+            className='text-text bg-secondary w-full py-2 pb-3 rounded-lg border-2 border-primary hover:text-primary text-xl'>posts</button>
+        <button 
+            onClick={() => {setState(1)}}
+            className='text-text bg-secondary w-full py-2 pb-3 rounded-lg border-2 border-primary hover:text-primary text-xl '>quotes</button>
       </div>
-      {/* <div ref={ref} className='h-1'></div> not active (infinite scroll)*/}
-      {isFetching && <div className='mx-auto mt-2 h-16 w-16 animate-spin rounded-full border-t border-accent'></div>}
-    </div>
-    </>
-  )
+      <div className='flex flex-col w-full'>
+        <div className='flex flex-col gap-2'>
+          {(state === 0) && savedPosts.map((p) => (
+            <PostCard key={p._id} post={p as Posts} username={session?.user.username} deletePost={deletePost} removeFromList={removePost} removeLikeUnlike={removeLikeUnlike} removeAddCommentNumber={removeAddCommentNumber}/>
+          ))}
+          {(state === 1) && savedQuotes.map(q => (
+            <QuoteCard key={q._id} quote={q} removeFromList={removeQuote}/>
+          ))}
+        </div>
+        {/* <div ref={ref} className='h-1'></div> not active (infinite scroll)*/}
+        {isFetching && <div className='mx-auto mt-2 h-16 w-16 animate-spin rounded-full border-t border-accent'></div>}
+      </div>
+      </>
+    )
+  }
 }
 
