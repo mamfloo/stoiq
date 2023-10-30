@@ -10,7 +10,7 @@ import { getServerSession } from "next-auth";
 export async function getQuotes(page: number, count: number){
   const session = await getServerSession(authOptions);
     try {
-      const res: Quotes[] = await Quote.find({}).skip(page + count).limit(count).lean();
+      const res: Quotes[] = await Quote.find({}).skip(page * count).limit(count).lean();
       if(!session){
         return res;
       } else {

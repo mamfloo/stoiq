@@ -12,7 +12,7 @@ export async function GET(req: Request){
     try {
         const res = await Account.findOne({username: session.user.username}).exec();
         if(res){
-            return NextResponse.json({quoptePage: res.quotePage}, {status: 200})
+            return NextResponse.json({quotePage: res.quotePage}, {status: 200})
         } else {
             return NextResponse.json({message: "No user found"}, {status: 400})
         }

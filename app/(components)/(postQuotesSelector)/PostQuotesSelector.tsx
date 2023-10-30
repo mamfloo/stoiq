@@ -23,15 +23,16 @@ export default function PostQuotesSelector() {
     const [ pageQuotes, setPageQuotes ] = useState(0);
     const [ isFetching, setIsFetching ] = useState(false);  
     const [ session, setSession ] = useState<Session | null>(null);
+    const [ firstRequestDone, setFirstRequestDone ] = useState(false);
     
     useEffect(() => {
         const getPage = async () => {
-            const session = await getSession();
-            if(session !== null){
+            const sessionFound = await getSession();
+            if(sessionFound !== null){
+                    setSession(sessionFound)
                     const res = await fetch("http://localhost:3000/api/quotePage");
                     const body = await res.json();
                     if(res.ok){
-                        console.log(body)
                         setPageQuotes(body.quotePage)
                     } else {
                         toast.error(body.error)
@@ -41,32 +42,27 @@ export default function PostQuotesSelector() {
             }
         }
         getPage()
+        
     }, [])
 
     //send the nexpage to the api before exiting the component
-    useEffect(() => {
-        return () => {
-            if(session){
-                const updatePage = async () => {
-                    const res = await fetch("http://localhost:3000/api/quotePage", {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            quotePage: pageQuotes
-                        })
-                    })
-                    console.log("ha finito di fare")
-                    const parsed = await res.json();
-                    if(!res.ok){
-                        toast.error(parsed.message)
-                    }
-                }
-                updatePage();
-            }
-        } 
-    }, [])
+    const updatePage = async () => {
+        if(session !== null){
+        const res = await fetch("http://localhost:3000/api/quotePage", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                quotePage: pageQuotes
+            })
+        })
+        const parsed = await res.json();
+        if(!res.ok){
+            toast.error(parsed.message)
+        }
+        }
+    }
 
     const getQ = async () => {
         setPosts([]);
@@ -78,7 +74,11 @@ export default function PostQuotesSelector() {
             setQuotes(qOld => (
                 qOld.concat(quotes as QuotesModel[])
             ));
-            //setPageQuotes(pageQuotes + 1);
+            setPageQuotes(pageQuotes + 1);
+            if(firstRequestDone){
+                updatePage();
+            }
+            setFirstRequestDone(true);
         } else {
             toast.error(quotes.errors);
         }
@@ -119,7 +119,7 @@ export default function PostQuotesSelector() {
 
     useEffect(()=>{
         if(state === 1 && entry?.isIntersecting ) {
-            setPageQuotes(pageQuotes + 1);
+            //setPageQuotes(pageQuotes + 1);
             getQ();
         }
         if(state === 0 && entry?.isIntersecting ){
