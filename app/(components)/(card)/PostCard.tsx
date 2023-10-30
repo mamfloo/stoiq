@@ -11,7 +11,7 @@ import Like from './Like'
 import Save from './Save'
 
 export default function PostCard({post, deletePost, username, removeFromList, removeLikeUnlike, removeAddCommentNumber}: {post: Posts, deletePost: 
-    (postId: string) => void, username: string | undefined, removeFromList: (id: string) => void, removeLikeUnlike?: (id: string, n: number)=> void, removeAddCommentNumber?: (id: string, n: number)=>void} ) {
+    (postId: string) => void, username: string | undefined, removeFromList?: (id: string) => void, removeLikeUnlike?: (id: string, n: number)=> void, removeAddCommentNumber?: (id: string, n: number)=>void} ) {
     const [isLiked, setIsLiked ] = useState(post.isLiked);
     const [isSaved, setIsSaved ] = useState(post.isSaved);
     const [commentsOpen, setCommentsOpen ] = useState(false);

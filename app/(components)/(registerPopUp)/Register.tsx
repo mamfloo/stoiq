@@ -2,9 +2,11 @@
 
 import { TRegisterSchema, registerSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { FcGoogle } from 'react-icons/fc';
 
 export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLoginPopUp: () => void, afterLoginOrRegister: () => void}) {
 
@@ -72,7 +74,11 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
   return (
     <div className='fixed bg-background/[0.95] rounded-lg top-1/2 left-1/2 transform -translate-y-1/2
       -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10'>
-        <h1 className='text-primary mb-10 text-2xl text-center mt-0'>Register</h1>
+        <button onClick={() => signIn("google")} className='mx-auto text-xl bg-white text-slate-500 p-3 rounded-lg'>
+          <FcGoogle className="inline-block mr-2" size="1.3em"/>
+          Sign In with Google
+        </button>
+        <h1 className='text-primary mb-6 text-2xl text-center mt-5'>Register</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-8'>
             <div className='flex justify-center flex-col'>
               <input 

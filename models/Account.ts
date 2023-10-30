@@ -15,7 +15,7 @@ const AccountSchema = new mongoose.Schema<Accounts>({
     username: {
         type: String,
         required: true,
-        maxlength: 30
+        maxlength: 30,
     },
     bio: {
         type: String,
@@ -30,7 +30,6 @@ const AccountSchema = new mongoose.Schema<Accounts>({
     },
     password: {
         type: String,
-        required: true,
     },
     profilePic: {
         type: String,

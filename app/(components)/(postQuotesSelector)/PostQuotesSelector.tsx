@@ -29,6 +29,7 @@ export default function PostQuotesSelector() {
         const getPage = async () => {
             const sessionFound = await getSession();
             if(sessionFound !== null){
+                console.log(sessionFound)
                     setSession(sessionFound)
                     const res = await fetch("http://localhost:3000/api/quotePage");
                     const body = await res.json();
@@ -44,7 +45,6 @@ export default function PostQuotesSelector() {
         getPage()
         
     }, [])
-
     //send the nexpage to the api before exiting the component
     const updatePage = async () => {
         if(session !== null){

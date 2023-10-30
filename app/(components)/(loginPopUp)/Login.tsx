@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { TLoginSchema, loginSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
+import {FcGoogle} from "react-icons/fc"
 
 export default function Login({openRegisterPopUp, afterLoginOrRegister}: {openRegisterPopUp: () => void, afterLoginOrRegister:() => void}) {
   const {
@@ -33,9 +34,14 @@ export default function Login({openRegisterPopUp, afterLoginOrRegister}: {openRe
   return (
     <div className='fixed bg-background/[0.95] rounded-lg top-1/2 left-1/2 transform -translate-y-1/2
       -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10'>
-        <h1 className='text-primary mb-10 text-2xl text-center mt-0'>Login</h1>
+        
+        <button onClick={() => signIn("google")} className='mx-auto text-xl bg-white text-slate-500 p-3 rounded-lg'>
+          <FcGoogle className="inline-block mr-2" size="1.3em"/>
+          Sign In with Google
+        </button>
+        <h1 className='text-primary mb-5 text-2xl text-center mt-4'>Login</h1>
         <form onSubmit={handleSubmit(login)}  className='flex flex-col gap-8'>
-          <div className='flex justify-center'>
+          <div className='flex justify-center flex-col'>
             <input 
                 {...register("username")}
                 name="username" type="text" placeholder='username' 
@@ -45,7 +51,7 @@ export default function Login({openRegisterPopUp, afterLoginOrRegister}: {openRe
                   <p className='text-red-500'>{errors.username.message}</p>
                 )}
           </div>
-          <div className='flex justify-center'>
+          <div className='flex justify-center flex-col'>
             <input 
               {...register("password")}
               name="password" type="password" placeholder='********'

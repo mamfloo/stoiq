@@ -4,6 +4,8 @@ import clientPromise from "./mongo/mongodb";
 import Account from "@/models/Account";
 import { compare } from "bcrypt";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google"
+import { getErrorMessage } from "./errorToString";
 
 
 export const authOptions: NextAuthOptions = {
@@ -16,6 +18,10 @@ export const authOptions: NextAuthOptions = {
         signIn: "/"
     },
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || ""
+        }),
         CredentialsProvider({
         // The name to display on the sign in form (e.g. "Sign in with...")
         name: "Credentials",
@@ -61,7 +67,6 @@ export const authOptions: NextAuthOptions = {
             token.profilePic = account.profilePic;
             token.page = account.page;
         }
-
         if(user){
             return {
                 ...token,
@@ -88,6 +93,25 @@ export const authOptions: NextAuthOptions = {
                 page: token.page
             }
         }
+    },
+    async signIn({profile}) {
+        console.log(profile);
+        try {
+            const res = await Account.findOne({email: profile?.email})
+            if(!res && profile){
+                const newUser = await Account.create({
+                    username: profile.name + "" + profile.image?.slice(45),
+                    email: profile.email,
+                    profilePic: "default.png",
+                    isActivated: true,
+                    registerDate: Date.now(),
+                    bio: "something funny",
+                });
+            }
+        } catch(e){
+            throw Error(getErrorMessage(e));
+        }
+        return true;
     }
   }
 }

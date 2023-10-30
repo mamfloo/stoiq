@@ -99,7 +99,7 @@ export default function Posts({posts, setPosts} : {posts: Posts[], setPosts: Rea
         </div>
         <div className="flex flex-col gap-3 mt-4">
             {posts.map((p) => (
-            <PostCard key={p._id} post={p} deletePost={deletePost} username={session?.user.username}/>
+            <PostCard key={p._id} post={p} deletePost={deletePost} username={session?.user.username} />
             ))} 
         </div>
     </>
