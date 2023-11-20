@@ -1,8 +1,8 @@
 import { registerSchema } from "@/lib/types";
-import Account from "@/models/Account";
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt"
 import { getErrorMessage } from "@/lib/errorToString";
+import Users from "@/models/Users";
 
 export async function POST(req: Request) {
     const body = await req.json();
@@ -19,17 +19,15 @@ export async function POST(req: Request) {
         )
         
     } 
-    console.log(result.data)
-    if(await Account.findOne({username: result.data.username})) {
+    if(await Users.findOne({username: result.data.username})) {
         return NextResponse.json({error: "Username already in use"});
     }
-    console.log(await Account.findOne({email: result.data.email}))
-    if(await Account.findOne({email: result.data.email})) {
+    if(await Users.findOne({email: result.data.email})) {
         return NextResponse.json({error: "Email already in use"});
     }
     try {
         const hashedPassword = await hash(result.data.password, 10)
-        let resultDb = await Account.create({
+        let resultDb = await Users.create({
             username: result.data.username,
             email: result.data.password,
             password: hashedPassword,

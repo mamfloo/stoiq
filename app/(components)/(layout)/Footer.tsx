@@ -1,8 +1,9 @@
-import Account from '@/models/Account'
+
 import Link from 'next/link'
 import React from 'react'
 import Image from "next/image"
 import dbConnect from '@/lib/mongo/connect';
+import Users from '@/models/Users';
 
 export default async function Footer() {
 
@@ -20,7 +21,7 @@ export default async function Footer() {
                     </div>
                     <div className='flex flex-col gap-1 justify-center'>
                         <Link className='text-primary font-semibold text-lg flex' href={'/user/' + a.username}>@{a.username} </Link>
-                        <p>{a.bio}</p>
+                        <p>{a.bio.length>20? a.bio.slice(0,30) + "..." : a.bio}</p>
                         {/* <div className='flex'>
                             <div className='mt-1'>
                                 <AiOutlineCalendar size={"1.1em"} />
@@ -44,7 +45,7 @@ async function getUsers(){
     //TODO controllare prima la connessione
     try {
         await dbConnect();
-        return await Account.aggregate([{$sample: {size: 5}}]).exec();
+        return await Users.aggregate([{$sample: {size: 5}}]).exec();
     } catch(e){
         throw Error("Could not connect to the db");
     }

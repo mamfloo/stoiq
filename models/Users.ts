@@ -1,6 +1,9 @@
+import { randomUUID } from "crypto";
 import mongoose from "mongoose";
 
-export interface Accounts extends mongoose.Document{
+export interface Users extends mongoose.Document{
+    name: string,
+    image: string
     username: string,
     bio: string,
     email: string,
@@ -11,16 +14,23 @@ export interface Accounts extends mongoose.Document{
     quotePage: number 
 }
 
-const AccountSchema = new mongoose.Schema<Accounts>({
+const UserSchema = new mongoose.Schema<Users>({
+    name: {
+        type: String,
+    },
+    image: {
+        type: String
+    },
     username: {
         type: String,
         required: true,
-        maxlength: 30,
+        maxlength: 20,
+        default: Math.random().toString(36).substring(2,15)
     },
     bio: {
         type: String,
         required: true,
-        maxlength: 500,
+        maxlength: 100,
         default: ""
     },
     email: {
@@ -34,14 +44,17 @@ const AccountSchema = new mongoose.Schema<Accounts>({
     profilePic: {
         type: String,
         required: true,
+        default: "default.png"
     },
     isActivated: {
         type: Boolean,
-        required: true
+        required: true,
+        default: true
     },
     registerDate: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now()
     },
     quotePage: {
         type: Number,
@@ -50,4 +63,4 @@ const AccountSchema = new mongoose.Schema<Accounts>({
     }
 })
 
-export default mongoose.models.Accounts || mongoose.model<Accounts>("Accounts", AccountSchema)
+export default mongoose.models.Users || mongoose.model<Users>("Users", UserSchema)

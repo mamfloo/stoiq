@@ -48,8 +48,8 @@ export type TCommentSchema = z.infer<typeof commentSchema>;
 
 export const updateAccountSchema = z
     .object({
-        username: z.string().min(1, "Username must be at least 1 characters").max(50, "Username must be max 50 characters"),
-        bio: z.string().max(500, "Bio must be max 50 characters"),
+        username: z.string().min(1, "Username must be at least 1 characters").max(20, "Username must be max 20 characters"),
+        bio: z.string().max(100, "Bio must be max 100 characters"),
     })
 
 export type TUpdateAccountSchema = z.infer<typeof updateAccountSchema>;

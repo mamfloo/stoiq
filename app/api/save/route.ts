@@ -15,7 +15,6 @@ export async function POST(req: Request){
         if(del){
             return NextResponse.json({message: "Unsaved"}, {status: 200});
         } 
-        console.log(body.type)
         const add = await Saved.create({
             referenceId: body.referenceId,
             saveTime: new Date(),

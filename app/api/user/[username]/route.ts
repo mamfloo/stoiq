@@ -1,13 +1,13 @@
 
 import { getErrorMessage } from "@/lib/errorToString";
-import Account from "@/models/Account";
+import Users from "@/models/Users";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request, {params}: {params: {username: string}}){
     try {
-        const doc = await Account.findOne({username: params.username}).exec();
+        const doc = await Users.findOne({username: params.username}).exec();
         if(doc === null){
-          throw Error("No user was found");
+          return NextResponse.json({message: "No user was found"}, {status: 400});
         }
         return NextResponse.json({message: "Success",
           body: {

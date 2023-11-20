@@ -9,9 +9,10 @@ import { getQuotes } from '@/app/(serverActions)/quoteService';
 import toast from 'react-hot-toast';
 import { getPosts } from '@/app/(serverActions)/postService';
 import { useIntersection } from '@mantine/hooks';
-import { getSession, useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { Session } from 'next-auth';
 
+export const revalidate = 5;
 
 export default function PostQuotesSelector() {
     //if state 0 then posts, if = 1 then quotes
@@ -28,16 +29,16 @@ export default function PostQuotesSelector() {
     useEffect(() => {
         const getPage = async () => {
             const sessionFound = await getSession();
+            console.log(sessionFound);
             if(sessionFound !== null){
-                console.log(sessionFound)
-                    setSession(sessionFound)
-                    const res = await fetch("http://localhost:3000/api/quotePage");
-                    const body = await res.json();
-                    if(res.ok){
-                        setPageQuotes(body.quotePage)
-                    } else {
-                        toast.error(body.error)
-                    }
+                setSession(sessionFound)
+                const res = await fetch("http://localhost:3000/api/quotePage");
+                const body = await res.json();
+                if(res.ok){
+                    setPageQuotes(body.quotePage)
+                } else {
+                    toast.error(body.error)
+                }
             } else {
                 setPageQuotes(0);
             }

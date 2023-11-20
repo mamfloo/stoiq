@@ -5,6 +5,7 @@ import { getErrorMessage } from "@/lib/errorToString";
 import Quote, { Quotes } from "@/models/Quote";
 import Saved from "@/models/Saved";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 
 export async function getQuotes(page: number, count: number){
@@ -16,6 +17,7 @@ export async function getQuotes(page: number, count: number){
       } else {
         const postIds = res.map(q => q._id.toString());
         const savedPosts = await Saved.find({accountId: session.user.id, referenceId: {$in: postIds}}).then(savedList => savedList.map(savedElement => savedElement.referenceId.toString()));
+        revalidatePath("/");
         return res.map(q => {
           if(savedPosts.includes(q._id.toString())){
             return {

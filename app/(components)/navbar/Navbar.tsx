@@ -81,17 +81,17 @@ export default function Navbar() {
   return (
     <div className='top-0 flex gap-2 bg-secondary justify-between px-1 items-center z-10'>
       <div>
-        {session && 
-          <div>
+        <div className="w-10">
+          {session && 
             <button 
               onClick={() => navigateTo("/saved")}
               className='bg-secondary'>
               <div className='p-3 hover:text-primary text-slate-300'>
-                <BiBookmark size="2em" />
+                <BiBookmark size="2.5em" />
               </div>
             </button>
-          </div>
-        }
+          }
+        </div>
       </div>
       <button className='bg-secondary'>
           <div className=''>
@@ -103,19 +103,17 @@ export default function Navbar() {
           <button className='bg-secondary' 
             onClick={() => setIsLoginOpen(!isLoginOpen)}>
             <div className='p-3  hover:text-primary'>
-              <BiLogInCircle size="2em" />
+              <BiLogInCircle size="2.5em" />
             </div>
           </button> 
         }
         {session && 
-        <div className="relative">
+        <div className="relative w-10 mr-2">
           <button className='bg-secondary'
             onClick={() => setIsOptionOpen(!isOptionOpen)}>
-            <div className='p-3 hover:text-primary'>
               <Image 
                 className="rounded-full aspect-square"
-                src={"/img/avatars/" + session.user.profilePic + "?$" + new Date().getTime()} alt={"profile image"} width={40} height={40}/>
-            </div>
+                src={"/img/avatars/" + session.user.profilePic + "?$" + new Date().getTime()} alt={"profile image"} width={50} height={50}/>
           </button>
           {isOptionOpen && 
               <div ref={optionMenuRef} 

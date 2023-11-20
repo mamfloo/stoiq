@@ -1,7 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/errorToString";
-import Like, { Likes } from "@/models/Like";
-import Saved, { Saved as ModelSaved} from "@/models/Saved";
+import Like from "@/models/Like";
+import Saved from "@/models/Saved";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

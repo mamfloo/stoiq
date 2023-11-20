@@ -84,7 +84,7 @@ export default function Posts({posts, setPosts} : {posts: Posts[], setPosts: Rea
             <div className="flex items-center">
                 <div className="hidden md:inline md:mr-2">
                     <Image 
-                    className="rounded-full aspect-square"
+                    className="rounded-full aspect-square border-2 border-primary"
                     src={"/img/avatars/" + imgAvatar + "?$" + new Date().getTime()} alt={"profile image"} width={60} height={60} loading="lazy"/>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}

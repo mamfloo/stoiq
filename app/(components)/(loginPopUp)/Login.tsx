@@ -33,9 +33,8 @@ export default function Login({openRegisterPopUp, afterLoginOrRegister}: {openRe
 
   return (
     <div className='fixed bg-background/[0.95] rounded-lg top-1/2 left-1/2 transform -translate-y-1/2
-      -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10'>
-        
-        <button onClick={() => signIn("google")} className='mx-auto text-xl bg-white text-slate-500 p-3 rounded-lg'>
+      -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10 border-2 border-accent'>
+        <button onClick={() => signIn("google")} className='mx-auto text-xl bg-white text-slate-500 p-3 rounded-lg w-full'>
           <FcGoogle className="inline-block mr-2" size="1.3em"/>
           Sign In with Google
         </button>

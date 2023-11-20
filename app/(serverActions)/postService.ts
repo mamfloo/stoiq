@@ -70,7 +70,7 @@ export async function getPosts(page: number, count: number, username?: string){
             ));
         } else {
             const listIdPost: string[] = res.map(p => (p._id))
-            const likes = await Like.find({referenceId: {$in: listIdPost}}).then(l => l.map(i => (i.referenceId.toString())));
+            const likes = await Like.find({accountId: session.user.id, referenceId: {$in: listIdPost}}).then(l => l.map(i => (i.referenceId.toString())));
             const saves = await Saved.find({accountId: session.user.id, referenceId: {$in: listIdPost}},).then(l => l.map(i => (i.referenceId.toString())));
             const result = res.map(p => {
                 let isLiked = false;

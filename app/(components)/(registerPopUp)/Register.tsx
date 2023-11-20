@@ -73,7 +73,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
 
   return (
     <div className='fixed bg-background/[0.95] rounded-lg top-1/2 left-1/2 transform -translate-y-1/2
-      -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10'>
+      -translate-x-1/2 px-16 py-10 w-full md:w-fit z-10 border-2 border-accent'>
         <button onClick={() => signIn("google")} className='mx-auto text-xl bg-white text-slate-500 p-3 rounded-lg'>
           <FcGoogle className="inline-block mr-2" size="1.3em"/>
           Sign In with Google
@@ -97,7 +97,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
                 {errors.username && (
-                  <p className='text-red-500 absolute'>{errors.email?.message}</p>
+                  <p className='text-red-500 '>{errors.email?.message}</p>
                 )}
               </div>
             <div className='flex justify-center flex-col'>
@@ -107,7 +107,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
                 {errors.password && (
-                  <p className='text-red-500 absolute'>{errors.password.message}</p>
+                  <p className='text-red-500 '>{errors.password.message}</p>
                 )}
             </div>
             <div className='flex flex-col justify-center'>
@@ -117,7 +117,7 @@ export default function Register({openLoginPopUp, afterLoginOrRegister}: {openLo
                 className='bg-secondary placeholder:text-center p-3 rounded-lg border-2 border-accent text-lg
                 focus:border-primary outline-none' />
                 {errors.confirmPassword && (
-                  <p className='text-red-500 '>{errors.confirmPassword.message}</p>
+                  <p className='text-red-500 max-w-[250px]'>{errors.confirmPassword.message}</p>
                 )}
             </div>
             <label htmlFor="terms" className='text-center'><input type="checkbox" name="terms" 

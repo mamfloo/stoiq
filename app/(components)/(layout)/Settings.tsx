@@ -5,10 +5,14 @@ import { BiBookmark } from "react-icons/bi";
 import Image from "next/image"
 import { FiSettings } from 'react-icons/fi';
 import LoginLogout from './LoginLogout';
+import Users from '@/models/Users';
+import dbConnect from '@/lib/mongo/connect';
 
 export default async function Settings() {
 
     const session = await getServerSession(authOptions)
+    await dbConnect();
+    const user = await Users.findOne({_id: session?.user.id},{_id: 0, profilePic: 0}).exec();
 
   return (
     <div className='flex flex-col gap-3 items-end'>
@@ -21,10 +25,10 @@ export default async function Settings() {
             <div className='flex flex-col gap-3 items-end'>
                 <button className=''>
                     <div className=''>
-                        <Link className="text-slate-300  font-mono text-xl flex gap-2 hover:text-primary" href={"/user/"+ session?.user.username}>
+                        <Link className="text-slate-300  font-mono text-xl flex gap-2 hover:text-primary" href={"/user/"+ user?.username}>
                             profile
                             <Image 
-                                className="rounded-full aspect-square"
+                                className="rounded-full aspect-square border-2 border-primary"
                                 src={"/img/avatars/" + session?.user.profilePic + "?$" + new Date().getTime()} alt={"profile image"} width={35} height={35}/>
                             </Link>
                     </div>
